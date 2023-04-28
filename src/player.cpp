@@ -1,0 +1,132 @@
+#include "player.hpp"
+
+Player::Player(){
+    skin = player::KING;//we do need a skin picker but fuck off for now :D
+    if (!texture->loadFromFile(PICS_PATH + "characters.png")) {
+        throw runtime_error("couldn't read player sprite");
+    }
+    if(!jumping_sound_buffer.loadFromFile(AUDIO_PATH + "player_jumping_sound.wav"))
+        throw runtime_error("couldn't read player jumping sound");
+    jumping_sound.setBuffer(jumping_sound_buffer);
+    jumping_sound.setVolume(player::JUMP_SOUND_VOLUME);
+    hp = 3;
+    sprite.setTexture(*texture);
+    vx = vy = ax = 0;
+    ay = player::GRAVITY;
+    going_up = faced_left = going_left = going_right = false;
+    update_count = 0;
+    state = player::STANDBY;
+    scale = player::CHARACTER_SCALE;
+    jumping = false;
+}
+
+void Player::update_avatar(){
+    update_count++;
+    update_count %= FRAME_RATE;
+    if(vx < 0 and !faced_left){
+        faced_left = true;
+    }
+    if(vx > 0 and faced_left){
+        faced_left = false;
+        mirror_sprite_horizontally();
+    }
+    switch(state){
+        case(player::WALKING):
+            set_frame(player::RUN_FRAMES[(update_count/player::ANIMATION_UPDATE_STEP)%player::RUN_FRAMES.size()]);
+            break;
+        case(player::STANDBY):
+            set_frame(player::IDLE[(update_count/player::ANIMATION_UPDATE_STEP)%player::IDLE.size()]);
+            break;
+        case(player::CLIMBING):
+            set_frame(player::CLIMB_FRAMES[(update_count/player::ANIMATION_UPDATE_STEP)%player::CLIMB_FRAMES.size()]);
+            break;
+        case(player::HANGING):
+            set_frame(player::CLIMB_IDLE[(update_count/player::ANIMATION_UPDATE_STEP)%player::CLIMB_IDLE.size()]);
+            break;
+        case(player::JUMPING):
+            set_frame(player::JUMP_FRAMES[(update_count/player::ANIMATION_UPDATE_STEP)%player::JUMP_FRAMES.size()]);
+            break;
+    }
+}
+
+void Player::update_state(){
+    if(vx == 0 and vy == 0)
+        state = player::STANDBY;
+    else if (vy != 0)
+        state = player::JUMPING;
+    else
+        state = player::WALKING;
+}
+
+void Player::update(double left_bound, double right_bound){
+    if(jumping)jump();
+    update_state();
+    update_avatar();
+    update_position(left_bound, right_bound);
+}
+
+void Player::go_left(){
+    if(going_left)return;
+    going_left = true;
+    vx -= player::SPEED;
+}
+
+void Player::go_right(){
+    if(going_right)return;
+    going_right = true;
+    vx += player::SPEED;
+}  
+
+void Player::stop_left(){
+    if(!going_left)return;
+    going_left = false;
+    vx += player::SPEED;
+}
+
+void Player::stop_right(){
+    if(!going_right)return;
+    going_right = false;
+    vx -= player::SPEED;
+}
+
+void Player::jump(){
+    if(going_up)return;
+    jumping_sound.play();   
+    going_up = true;
+    jumping = true;
+    vy -= player::JUMP_STRENGTH;
+    ay = player::GRAVITY;
+}
+
+void Player::stop_jump(){
+    jumping = false;
+}   
+
+bool Player::is_going_down(){
+    return vy > 0;
+}
+
+void Player::fall(){
+    if(going_up)
+        return;
+    ay = player::GRAVITY;
+}
+
+int Player::get_hp(){
+    return hp;
+}
+
+void Player::inc_hp(){
+    hp++;
+}
+
+void Player::dec_hp(){
+    hp--;
+}
+
+void Player::set_frame(int frame){
+    auto rect = IntRect(player::IMG_X[frame], player::IMG_Y[skin], player::CHARACTER_WIDTH, player::CHARACTER_HEIGHT);
+    rect.left -= player::CHARACTER_WIDTH;
+    rect.top -= player::CHARACTER_HEIGHT;
+    Entity::set_frame(rect, faced_left);
+}

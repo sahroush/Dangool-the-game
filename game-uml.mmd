@@ -1,0 +1,87 @@
+classDiagram
+
+MovingObj <|-- Player
+MovingObj <|-- Enemy
+MovingObj <|-- NPC
+StableObj <|-- Spike
+StableObj <|-- Button
+MovingObj <|-- MovingBlock
+Enemy <|-- Sheilded
+Enemy <|-- Dummy
+StableObj <|-- Reward
+Reward <|-- Diamond
+Reward <|-- Star
+Terrain <|-- Ground
+Terrain <|-- Wall
+Entity <|-- MovingObj
+Entity <|-- StableObj
+Entity <|-- Terrain
+StableObj <|-- Portal
+Entity : # Position
+Reward : # Value
+MovingObj : # Motion
+Entity : + HandleCollision()
+
+Menu <|-- PauseMenu
+Menu <|-- StartMenu
+Menu <|-- LevelSelect
+Menu <|-- Credits
+Menu <|-- Settings
+Menu <|-- DebugMenu
+Menu <|-- ConfirmationPopUp
+
+Sheilded : - bool is_sheilded
+Dummy : - int HP
+
+StableObj <|-- Mover
+Mover <|-- Ladder
+Mover <|-- Rope
+
+Mover : - Position begin
+Mover : - Position End
+
+Player : - int HP
+%%Player : - int Score
+Level <..> Map
+Level : - Mob[]
+Level : - int Score
+Level : + Start()
+
+Entity : + Draw()
+
+Map .. Entity
+Map : - bool CheckCollision(Entity, Entity)
+Entity : - Sprite
+
+Menu : MenuItem[]
+MenuItem .. Menu
+MenuItem : - String Text 
+MenuItem : - Texture
+MenuItem : - bool Clicked
+
+Spike : - int Damage
+Enemy : - int Damage
+NPC : - bool IsRescued
+
+Button : - bool IsUp
+Button : - int Height
+Menu <|-- LoadingScreen
+Level : + Pause()
+Level : + Exit()
+
+Level : # int Gravity
+
+NPC : - void FindPath()
+Sheilded : - void Unsheild()
+MovingObj : # void HandleGravity()
+Enemy : # void Die()
+Enemy : # void Recover()
+
+LevelSelect -- Level
+
+System <--> Menu
+System : - int Volume
+System : - Levels[]
+System : - LevelSaves[]
+System : - Volumes
+System : void ChangeMenu()
