@@ -1,20 +1,24 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio #-fsanitize=address -fsanitize=undefined
-SRCDIR = src
-SRCS := $(wildcard $(SRCDIR)/*.cpp)
-OBJS = $(SRCS:.cpp=.o)
-MAIN = bin/turtix.out
-HDRS := $(wildcard $(SRCDIR)/*.hpp)
+CXXFLAGS = -std=c++11 -Wall #-fsanitize=address -fsanitize=undefined
+LFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+SRC_FILES = $(wildcard ./src/*.cpp)
+OBJ_FILES = $(SRC_FILES:./src/%.cpp=./obj/%.o)
+BIN_NAME = bin/turtix.out
+HDR_FILES := $(wildcard ./src/*.hpp)
+MEDIA_PATH = ./files/
 
 .PHONY: clean
+.PHONY: run
 
-all: $(MAIN)
+$(BIN_NAME): $(OBJ_FILES) $(HDR_FILES)
+	$(CXX) $(OBJ_FILES) $(CXXFLAGS) $(LFLAGS) -o $(BIN_NAME) -L$(MEDIA_PATH)
 
-$(MAIN): $(OBJS) $(HDRS)
-	$(CXX) $ $(OBJS) $(CXXFLAGS) -o $(MAIN)
-
-.cpp.o:
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+./obj/%.o: ./src/%.cpp
+	mkdir -p ./obj
+	$(CXX) $(CXXFLAGS) $(LFLAGS) -c $< -o $@ -I$(MEDIA_PATH)
 
 clean:
-	$(RM) $(OBJS) $(MAIN)
+	rm -rf ./obj $(BIN_NAME)
+
+run: $(BIN_NAME)
+	$(BIN_NAME)

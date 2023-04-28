@@ -20,8 +20,8 @@ const int HEIGHT = 850;
 const int FRAME_RATE = 72;
 const int LEVEL_COUNT = 1;
 enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS};
-const string PICS_PATH = "../files/pics/", MAPS_PATH = "../files/maps/", AUDIO_PATH = "../files/audio/",
-    FONTS_PATH = "../files/fonts/";
+const string PICS_PATH = "./files/pics/", MAPS_PATH = "./files/maps/", AUDIO_PATH = "./files/audio/",
+    FONTS_PATH = "./files/fonts/";
 const Color BLUE = Color(50, 115, 220);
 const Color PURPLE = Color(130, 50, 220);
 const Color YELLOW = Color(255, 221, 0);

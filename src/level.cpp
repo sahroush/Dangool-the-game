@@ -176,7 +176,7 @@ void Level::find_terrain_bounds(vector <string> &lines){
         for(int j = 0 ; j < (int)lines[i].size() ; j ++){
             char c = lines[i][j];
             if(c == '.'){
-                if(i == 0 or !(lines[i-1].size() > j and lines[i-1][j] == '.'))  
+                if(i == 0 or !(int(lines[i-1].size()) > j and lines[i-1][j] == '.'))  
                     add_terrain_bound(lines, i, j, dx, dy);
             }
         }
