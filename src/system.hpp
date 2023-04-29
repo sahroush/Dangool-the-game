@@ -11,8 +11,8 @@ public:
     ~System();//TBD
     RenderWindow window;
 private:
-    SimpleScreen game_over_tab("Game over! :'(", "gameover.ogg");
-    SimpleScreen victory_tab("Winner Winner Chicken dinner!", "victory.ogg");
+    SimpleScreen* game_over_tab;
+    SimpleScreen* victory_tab;
     void update();
     void render();
     void handle_events();
@@ -25,6 +25,7 @@ private:
     int current_level_id;
     bool is_closed;
     Clock clock;
-    Time gameover_duration = seconds(3.0f);
+    Time gameover_duration = seconds(7.9f);
+    Time victory_duration = seconds(8.0f);
     Time accumulator = Time::Zero;
 };

@@ -9,6 +9,8 @@ System::System(int width, int height){
     }//this can be done outside a for loop
     current_level_id = 2; //level_select must do this.
     levels[current_level_id]->init(current_level_id);
+    victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
+    game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
 }
 
 System::~System(){
@@ -103,6 +105,13 @@ void System::update(){
                 accumulator = Time::Zero;
                 clock.restart();
             }
+            if(levels[current_level_id]->check_won()){
+                delete levels[current_level_id];
+                levels[current_level_id] = new Level;
+                state = VICTORY_SCREEN;
+                accumulator = Time::Zero;
+                clock.restart();
+            }
             break;
         case(PAUSE_MENU):
             break;
@@ -111,6 +120,12 @@ void System::update(){
         case(LEVEL_SELECT):
             break;
         case(VICTORY_SCREEN):
+            accumulator += clock.restart();
+            victory_tab->update();
+            if(accumulator > victory_duration){
+                victory_tab->stop();
+                state = MAIN_MENU;
+            }
             break;
         case(GAMEOVER_SCREEN):
             accumulator += clock.restart();
@@ -138,6 +153,7 @@ void System::render(){
         case(LEVEL_SELECT):
             break;
         case(VICTORY_SCREEN):
+            victory_tab->render(window);
             break;
         case(GAMEOVER_SCREEN):
             game_over_tab->render(window);
