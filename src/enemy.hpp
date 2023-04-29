@@ -6,15 +6,14 @@
 class Enemy : public Entity{
 public:
     void reverse(); 
-    void die();
     bool get_display();
     bool is_alive();
-    void get_hit();
+    virtual void get_hit();
     virtual void update(double a, double b)=0;
     int get_direction();
     bool is_moving();
     int get_score();
-    virtual bool is_hittable();
+    virtual bool is_hittable() = 0;
 protected:
     int hp;
     int score;

@@ -22,12 +22,14 @@ Entity::Entity(Texture* tex, Vector2f scale_){
 }
 
 void Entity::mirror_sprite_horizontally() {
+    Vector2f pos = sprite.getPosition();
     sprite.scale(-1, 1);
     if(sprite.getScale().x < 0 and sprite.getOrigin().x == 0)
         sprite.setOrigin(sprite.getLocalBounds().width - sprite.getOrigin().x, sprite.getOrigin().y);
     if(sprite.getScale().x > 0 and sprite.getOrigin().x != 0){
         sprite.setOrigin(0, sprite.getOrigin().y);
     }
+    sprite.setPosition(pos);
 }
 
 void Entity::update_position(double left_bound, double right_bound){
@@ -194,6 +196,7 @@ void Entity::rotate90(){
 void Entity::set_frame(IntRect frame, bool mirror){
     sprite.setTextureRect(frame);
     sprite.setScale(scale);
+    sprite.setOrigin(0, 0);
     if(mirror)
         mirror_sprite_horizontally();
 }

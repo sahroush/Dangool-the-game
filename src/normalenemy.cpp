@@ -43,7 +43,7 @@ void NormalEnemy::update_avatar(){
         case(normal_enemy::KNOCKED):
             vx = 0;
             accumulator += clock.restart();
-            set_frame(frames[cur_frame = calc_frame()], direction>0);
+            set_frame(frames[cur_frame = calc_frame()], direction<0);
             if (accumulator >= knock_out_duration){
                 state = normal_enemy::STAGE2;
                 update_count = 0;
@@ -52,7 +52,7 @@ void NormalEnemy::update_avatar(){
             break;
         case(normal_enemy::STAGE2):
             vx = normal_enemy::SPEED * direction;
-            set_frame(frames[cur_frame = calc_frame()], direction>0);
+            set_frame(frames[cur_frame = calc_frame()], direction<0);
             break;
     }
     int cur_h = get_height();
@@ -62,4 +62,22 @@ void NormalEnemy::update_avatar(){
 void NormalEnemy::update(double left_bound, double right_bound){
     update_avatar();
     update_position(left_bound, right_bound);
+}
+
+void NormalEnemy::get_hit(){
+    Enemy::get_hit();
+    update_count = 0;
+    switch(state){
+        case(normal_enemy::KNOCKED):
+            throw runtime_error("This shouldn't have happened (normalenemy.cpp:71)");
+            break;
+        case(normal_enemy::STAGE1):
+            state = normal_enemy::KNOCKED;
+            clock.restart();
+            accumulator = Time::Zero;
+            break;
+        case(normal_enemy::STAGE2):
+            //RIP ;'(
+            break;
+    }
 }

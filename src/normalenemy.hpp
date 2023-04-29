@@ -3,7 +3,7 @@
 #include "enemy.hpp"
 
 namespace normal_enemy{
-    const int ANIMATION_UPDATE_STEP = 24;
+    const int ANIMATION_UPDATE_STEP = 12;
     enum State {STAGE1, KNOCKED, STAGE2};
     const int SPEED = 2;
 }
@@ -13,6 +13,7 @@ public:
     NormalEnemy();
     bool is_hittable();
     void update(double left_bound, double right_bound);
+    void get_hit();
 private:
     normal_enemy::State state = normal_enemy::STAGE1;
     vector <IntRect> frames = {{2, 69, 28, 27}, {34, 69, 28, 27}, {97, 82, 12, 13},
