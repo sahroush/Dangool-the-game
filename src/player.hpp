@@ -56,6 +56,8 @@ private:
     Sound jumping_sound;
     SoundBuffer screaming_sound_buffer;
     Sound screaming_sound;
+    SoundBuffer kill_sound_buffer;
+    Sound kill_sound;
     void update_avatar();
     void update_state();
     void set_frame(int frame);

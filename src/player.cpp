@@ -12,6 +12,9 @@ Player::Player(int x_, int y_){
     if(!screaming_sound_buffer.loadFromFile(AUDIO_PATH + "scream.ogg"))
         throw runtime_error("couldn't read player screaming sound");
     screaming_sound.setBuffer(screaming_sound_buffer);
+    if(!kill_sound_buffer.loadFromFile(AUDIO_PATH + "enemy_killed.ogg"))
+        throw runtime_error("couldn't read player kill sound");
+    kill_sound.setBuffer(kill_sound_buffer);
     hp = 3;
     sprite.setTexture(*texture);
     vx = vy = ax = 0;
@@ -65,6 +68,10 @@ bool Player::has_hit_enemy(FloatRect enemy){
 
 void Player::handle_kill(){
     vy = -player::JUMP_STRENGTH/2.f;
+    kill_sound.play();
+    kill_sound.pause();
+    kill_sound.setPlayingOffset(seconds(0.3));
+    kill_sound.play();
 }
 
 void Player::update_state(){
