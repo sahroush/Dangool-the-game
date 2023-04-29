@@ -42,7 +42,7 @@ void ArmoredEnemy::update_avatar(){
         case(armored_enemy::WALKING):
             vx = armored_enemy::SPEED * direction;
             accumulator += clock.restart();
-            set_frame(frames[cur_frame = calc_frame()], vx<0);
+            set_frame(frames[cur_frame = calc_frame()], direction<0);
             if (accumulator >= walking_duration){
                 state = armored_enemy::GOING_TO_SLEEP;
                 update_count = 0;
@@ -63,7 +63,7 @@ void ArmoredEnemy::update_avatar(){
             break;
         case(armored_enemy::GOING_TO_SLEEP):
             vx = 0;
-            set_frame(frames[cur_frame = calc_frame()]);
+            set_frame(frames[cur_frame = calc_frame()], direction<0);
             if((update_count/armored_enemy::ANIMATION_UPDATE_STEP)+1 >= (int)going_to_sleep_frames.size()){
                 state = armored_enemy::SLEEPING;
                 update_count = 0;
@@ -72,7 +72,7 @@ void ArmoredEnemy::update_avatar(){
             break;
         case(armored_enemy::WAKING_UP):
             vx = 0;
-            set_frame(frames[cur_frame = calc_frame()]);
+            set_frame(frames[cur_frame = calc_frame()], direction<0);
             if((update_count/armored_enemy::ANIMATION_UPDATE_STEP)+1 >= (int)waking_up_frames.size()){
                 state = armored_enemy::WALKING;
                 update_count = 0;
