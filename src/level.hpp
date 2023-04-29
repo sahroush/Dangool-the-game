@@ -67,4 +67,5 @@ private:
     void update_enemies();
     Music music;
     void add_terrain_bound(vector <string> &lines, int row, int col, int dx, int dy);
+    void check_enemy_collisions(Enemy *enemy);
 };

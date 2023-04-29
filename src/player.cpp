@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player(){
+Player::Player(int x_, int y_){
     skin = player::KING;//we do need a skin picker but fuck off for now :D
     if (!texture->loadFromFile(PICS_PATH + "characters.png")) {
         throw runtime_error("couldn't read player sprite");
@@ -18,6 +18,8 @@ Player::Player(){
     state = player::STANDBY;
     scale = player::CHARACTER_SCALE;
     jumping = false;
+    sprite.setPosition(x_, y_);
+    set_frame(player::IDLE[0]);
 }
 
 void Player::update_avatar(){
@@ -47,6 +49,19 @@ void Player::update_avatar(){
             set_frame(player::JUMP_FRAMES[(update_count/player::ANIMATION_UPDATE_STEP)%player::JUMP_FRAMES.size()]);
             break;
     }
+}
+
+bool Player::has_hit_enemy(FloatRect enemy){
+    FloatRect me = sprite.getGlobalBounds();
+    me = find_first_collision(me, enemy);
+    if(check_bottom_collision(me, enemy)){
+        return 1;
+    }
+    return 0;
+}
+
+void Player::handle_kill(){
+    vy -= 10;
 }
 
 void Player::update_state(){

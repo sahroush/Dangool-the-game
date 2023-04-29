@@ -2,19 +2,29 @@
 
 void Enemy::reverse(){
     mirror_sprite_horizontally();
-    vx = -vx;
+    direction = -direction;
 }
 
 void Enemy::get_hit(){
     hp--;
+    if(hp == 0)
+        display = false;
 }
 
-void Enemy::update(){
-    sprite.move(vx, 0);
+int Enemy::get_direction(){
+    return direction;
+}
+
+bool Enemy::is_moving(){
+    return vx!=0;
 }
 
 bool Enemy::get_display(){
     return display;
+}
+
+int Enemy::get_score(){
+    return score;
 }
 
 bool Enemy::is_alive(){

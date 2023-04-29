@@ -5,13 +5,18 @@
 
 class Enemy : public Entity{
 public:
-    void update();
     void reverse(); 
     void die();
     bool get_display();
     bool is_alive();
     void get_hit();
+    virtual void update(double a, double b)=0;
+    int get_direction();
+    bool is_moving();
+    int get_score();
 protected:
     int hp;
+    int score;
     bool display;
+    int direction = 1;
 };

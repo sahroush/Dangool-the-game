@@ -42,9 +42,41 @@ void Level::check_player_collisions(){
     for(auto bound : terrain_bounds)
         if(nex.intersects(bound))
             player->handle_collision(bound);
+    for(auto e : enemies){
+        if(!e->get_display())
+            continue;
+        auto rect = e->get_rect();
+        if(nex.intersects(rect)){
+            if(player->has_hit_enemy(rect) and e->is_moving()){
+                e->get_hit();
+                score += e->get_score();
+                player->handle_kill();
+            }
+            else{
+                player->dec_hp();
+                player->set_position(teleporter->get_position().x, teleporter->get_position().y);
+            }
+        }   
+    }
 }
 
+void Level::check_enemy_collisions(Enemy* enemy){
+    if(!enemy->is_moving() or !enemy->get_display())
+        return;
+    FloatRect nex = enemy->get_next_frame_rect(leftmost_point, rightmost_point);
+    for(auto bound : terrain_bounds)
+        if(nex.intersects(bound))
+            enemy->handle_collision(bound), enemy->reverse();
+    Sprite sp = enemy->get_sprite();
+    sp.move(enemy->get_width() * enemy->get_direction(), 0);
+    if(will_fall(sp) or nex.left == leftmost_point or nex.left + nex.width == rightmost_point)
+        enemy->reverse();
+}
+
+
 void Level::check_collisions(){
+    for(Enemy *e : enemies)
+        check_enemy_collisions(e);
     check_player_collisions();
 }
 
@@ -83,10 +115,10 @@ void Level::update(){
     }
     check_collisions();
     player->update(leftmost_point, rightmost_point);
+    update_enemies();
     update_rewards();
     teleporter->update();
     update_music();
-    update_enemies();
 }
 
 void Level::update_rewards(){
@@ -104,7 +136,7 @@ void Level::update_rewards(){
 void Level::update_enemies(){
     for(Enemy* e : enemies){
         if(e->is_alive()){
-            e->update();
+            e->update(leftmost_point, rightmost_point);
             if(player->collides_with(e->get_sprite())){
                 //do stoopid shit here
             }
@@ -145,13 +177,13 @@ void Level::render_hp(RenderWindow &window, int hp){
 void Level::render(RenderWindow &window){
     teleporter->render(window);
     render_terrain(window);
-    player->render(window);
     render_rewards(window);
+    render_enemies(window);
+    player->render(window);
     adjust_view();
     window.setView(view);
     render_score(window);
     render_hp(window, player->get_hp());
-    render_enemies(window);
 }
 
 void Level::render_terrain(RenderWindow &window){
@@ -186,8 +218,7 @@ void Level::find_terrain_bounds(vector <string> &lines){
 void Level::init(int level){
     read_map(MAPS_PATH + to_string(level));
     find_sprite_bounds(terrain);
-    player = new Player();
-    player->set_position(teleporter->get_position().x, teleporter->get_position().y);
+    player = new Player(teleporter->get_position().x, teleporter->get_position().y);
 }
 
 void Level::add_terrain(vector <string> &lines){
@@ -220,7 +251,7 @@ void Level::add_stuff(vector <string> &lines, int width, int height){
             }
             if(c == 'M'){
                 enemies.push_back(new ArmoredEnemy);
-                enemies.back()->set_position(j*width, i*height);
+                enemies.back()->set_position(j*width, (i+1)*height-enemies.back()->get_height());
             }   
         }
     }

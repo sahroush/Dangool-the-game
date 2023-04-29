@@ -21,14 +21,14 @@ namespace player{
         CLIMB_IDLE = {21},
         IDLE = {0};
     enum Player_state {WALKING, STANDBY, CLIMBING, HANGING, JUMPING};
-    const int SPEED = 3;
+    const int SPEED = 5;
     const float GRAVITY = 0.3;
     const int JUMP_STRENGTH = 13;
     const float COLLISION_ERROR = 5;
 }
 class Player : public Entity{
 public:
-    Player();
+    Player(int x_, int y_);
     void update(double left_bound, double right_bound);
     void go_left();
     void go_right();
@@ -41,6 +41,8 @@ public:
     void inc_hp();
     void dec_hp();
     void stop_jump();
+    bool has_hit_enemy(FloatRect enemy);
+    void handle_kill();
 protected:
     
 private:

@@ -7,7 +7,7 @@ System::System(int width, int height){
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
     }//this can be done outside a for loop
-    current_level_id = 0; //level_select must do this.
+    current_level_id = 2; //level_select must do this.
     levels[current_level_id]->init(current_level_id);
 }
 
@@ -27,9 +27,10 @@ void System::run(){
 
 void System::handle_key_down(Keyboard::Key key){
     if(key == Keyboard::Key::Escape){
+        delete levels[current_level_id];
         window.close();
         is_closed = true;
-        return;
+        exit(0);
     }
     switch(state){
         case(IN_GAME):

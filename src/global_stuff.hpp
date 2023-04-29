@@ -5,6 +5,7 @@
 #include <utility> 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include <deque>
 #include <vector>
 #include <chrono>
@@ -18,7 +19,7 @@ using namespace std;
 const int WIDTH = 1200;
 const int HEIGHT = 850;
 const int FRAME_RATE = 72;
-const int LEVEL_COUNT = 1;
+const int LEVEL_COUNT = 3;
 enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS};
 const string PICS_PATH = "./files/pics/", MAPS_PATH = "./files/maps/", AUDIO_PATH = "./files/audio/",
     FONTS_PATH = "./files/fonts/";
