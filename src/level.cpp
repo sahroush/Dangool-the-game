@@ -275,6 +275,10 @@ void Level::add_stuff(vector <string> &lines, int width, int height){
                 enemies.push_back(new ArmoredEnemy);
                 enemies.back()->set_position(j*width, (i+1)*height-enemies.back()->get_height());
             }   
+            if(c == 'E'){
+                enemies.push_back(new NormalEnemy);
+                enemies.back()->set_position(j*width, (i+1)*height-enemies.back()->get_height());
+            }
         }
     }
 }

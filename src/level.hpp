@@ -7,6 +7,7 @@
 #include "star.hpp"
 #include "enemy.hpp"
 #include "armored.hpp"
+#include "normalenemy.hpp"
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
 const float SMALL_MOVEMENT = 0.1;
