@@ -61,7 +61,7 @@ bool Player::has_hit_enemy(FloatRect enemy){
 }
 
 void Player::handle_kill(){
-    vy -= 10;
+    vy = -player::JUMP_STRENGTH/2.f;
 }
 
 void Player::update_state(){
