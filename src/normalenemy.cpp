@@ -75,6 +75,7 @@ void NormalEnemy::get_hit(){
             state = normal_enemy::KNOCKED;
             clock.restart();
             accumulator = Time::Zero;
+            sprite.move(sprite.getGlobalBounds().width/2.f, 0);
             break;
         case(normal_enemy::STAGE2):
             //RIP ;'(

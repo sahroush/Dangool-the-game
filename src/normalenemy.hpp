@@ -6,6 +6,7 @@ namespace normal_enemy{
     const int ANIMATION_UPDATE_STEP = 12;
     enum State {STAGE1, KNOCKED, STAGE2};
     const int SPEED = 2;
+    const float GRAVITY = 0.2;
 }
 
 class NormalEnemy : public Enemy{
