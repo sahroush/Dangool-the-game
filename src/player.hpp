@@ -54,6 +54,8 @@ private:
     player::Player_state state;
     SoundBuffer jumping_sound_buffer;
     Sound jumping_sound;
+    SoundBuffer screaming_sound_buffer;
+    Sound screaming_sound;
     void update_avatar();
     void update_state();
     void set_frame(int frame);

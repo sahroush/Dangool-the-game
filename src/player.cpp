@@ -9,6 +9,9 @@ Player::Player(int x_, int y_){
         throw runtime_error("couldn't read player jumping sound");
     jumping_sound.setBuffer(jumping_sound_buffer);
     jumping_sound.setVolume(player::JUMP_SOUND_VOLUME);
+    if(!screaming_sound_buffer.loadFromFile(AUDIO_PATH + "scream.ogg"))
+        throw runtime_error("couldn't read player screaming sound");
+    screaming_sound.setBuffer(screaming_sound_buffer);
     hp = 3;
     sprite.setTexture(*texture);
     vx = vy = ax = 0;
@@ -148,6 +151,7 @@ int Player::get_hp(){
 void Player::get_hit(){
     hp--;
     accumulator = Time::Zero;
+    screaming_sound.play();
 }
 
 void Player::set_frame(int frame){
