@@ -38,11 +38,11 @@ public:
     bool is_going_down();
     void fall();
     int get_hp();
-    void inc_hp();
-    void dec_hp();
+    void get_hit();
     void stop_jump();
     bool has_hit_enemy(FloatRect enemy);
     void handle_kill();
+    bool is_immune();
 protected:
     
 private:
@@ -57,4 +57,8 @@ private:
     void update_avatar();
     void update_state();
     void set_frame(int frame);
+    Clock clock;
+    Time immunity_duration = seconds(3.0f);
+    Time accumulator = immunity_duration + seconds(2);
+    void update_sheild();
 };

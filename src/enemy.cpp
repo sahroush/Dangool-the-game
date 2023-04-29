@@ -30,3 +30,7 @@ int Enemy::get_score(){
 bool Enemy::is_alive(){
     return hp != 0;
 }
+
+bool Enemy::is_hittable(){
+    return 1;
+}

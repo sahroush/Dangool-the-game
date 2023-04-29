@@ -153,6 +153,10 @@ bool Entity::collides_with(Sprite other){
 
 void Entity::render(RenderWindow &window){
     window.draw(sprite);
+    if(has_external_sprite){
+        has_external_sprite = false;
+        window.draw(external_sprite);
+    }
 }
 
 Vector2f Entity::get_position(){
@@ -204,4 +208,16 @@ double Entity::get_width(){
 
 double Entity::get_height(){
     return sprite.getGlobalBounds().height;
+}
+
+void Entity::draw_external_sprite(int x, int y, int w, int h){
+    has_external_sprite = true;
+    external_sprite = sprite;
+    IntRect rect = sprite.getTextureRect();
+    rect.left += x;
+    rect.top += y;
+    rect.width += w;
+    rect.height += h;
+    external_sprite.setTextureRect(rect);
+    external_sprite.move(x*scale.x, y*scale.y);
 }

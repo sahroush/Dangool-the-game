@@ -37,31 +37,36 @@ void Level::init_music(int id){
     music.setLoop(true);
 }
 
-void Level::check_player_collisions(){
+void Level::check_enemy_interactions(){
     FloatRect nex = player->get_next_frame_rect(leftmost_point, rightmost_point);
-    for(auto bound : terrain_bounds)
-        if(nex.intersects(bound))
-            player->handle_collision(bound);
     for(auto e : enemies){
         if(!e->get_display())
             continue;
         auto rect = e->get_rect();
         if(nex.intersects(rect)){
-            if(player->has_hit_enemy(rect) and e->is_moving()){
+            if(player->has_hit_enemy(rect) and e->is_hittable() and !player->is_immune()){
                 e->get_hit();
                 score += e->get_score();
                 player->handle_kill();
             }
-            else{
-                player->dec_hp();
-                player->set_position(teleporter->get_position().x, teleporter->get_position().y);
+            else if(!player->is_immune()){
+                player->get_hit();
             }
+            player->handle_collision(rect);
         }   
     }
 }
 
+void Level::check_player_collisions(){
+    FloatRect nex = player->get_next_frame_rect(leftmost_point, rightmost_point);
+    for(auto bound : terrain_bounds)
+        if(nex.intersects(bound))
+            player->handle_collision(bound);
+    check_enemy_interactions();
+}
+
 void Level::check_enemy_collisions(Enemy* enemy){
-    if(!enemy->is_moving() or !enemy->get_display())
+    if(!enemy->get_display())
         return;
     FloatRect nex = enemy->get_next_frame_rect(leftmost_point, rightmost_point);
     for(auto bound : terrain_bounds)
@@ -109,7 +114,24 @@ bool Level::can_go_right(Sprite sp){
     return 1;
 }
 
+void Level::activate_gameover_mode(){
+    has_lost = true;
+    music.stop();
+}
+
+bool Level::check_lost(){
+    return has_lost;
+}
+
+bool Level::check_won(){
+    return has_won;
+}
+
 void Level::update(){
+    if(player->get_hp() == 0){
+        activate_gameover_mode();
+        return;
+    }
     if(will_fall(player->get_sprite())){
         player->fall();
     }

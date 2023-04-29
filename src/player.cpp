@@ -73,11 +73,25 @@ void Player::update_state(){
         state = player::WALKING;
 }
 
+void Player::update_sheild(){
+    accumulator += clock.restart();
+    if(accumulator > immunity_duration)
+        sprite.setColor(Color::White);
+    else
+        sprite.setColor(PURPLE);
+}
+
+bool Player::is_immune(){
+    accumulator += clock.restart();
+    return (accumulator <= immunity_duration);
+}
+
 void Player::update(double left_bound, double right_bound){
     if(jumping)jump();
     update_state();
     update_avatar();
     update_position(left_bound, right_bound);
+    update_sheild();
 }
 
 void Player::go_left(){
@@ -131,12 +145,9 @@ int Player::get_hp(){
     return hp;
 }
 
-void Player::inc_hp(){
-    hp++;
-}
-
-void Player::dec_hp(){
+void Player::get_hit(){
     hp--;
+    accumulator = Time::Zero;
 }
 
 void Player::set_frame(int frame){

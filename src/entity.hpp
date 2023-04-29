@@ -26,7 +26,8 @@ public:
     FloatRect get_rect();
 protected:
     double vx = 0, vy = 0, ax = 0, ay = 0;
-    Sprite sprite;
+    Sprite sprite, external_sprite;
+    bool has_external_sprite = false;
     Texture* texture = new Texture;
     void mirror_sprite_horizontally();
     void rotate90();
@@ -42,4 +43,5 @@ protected:
     int x_after_collision = 0, y_after_collision = 0;
     bool going_up = false;
     FloatRect find_overlap_rect(FloatRect rect1, FloatRect rect2);
+    void draw_external_sprite(int x, int y, int w, int h);
 };

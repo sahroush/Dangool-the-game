@@ -14,6 +14,7 @@ public:
     int get_direction();
     bool is_moving();
     int get_score();
+    virtual bool is_hittable();
 protected:
     int hp;
     int score;

@@ -27,10 +27,13 @@ public:
     void init(int level);
     void handle_key_down(Keyboard::Key key);
     void handle_key_up(Keyboard::Key key);
+    bool check_lost();
+    bool check_won();
 protected:
 
 private:
     Player* player;
+    void check_enemy_interactions();
     void read_map(string map_path);
     void render_terrain(RenderWindow &window);
     vector <Entity*> terrain;
@@ -50,6 +53,8 @@ private:
     bool will_fall(Sprite sp);
     bool can_go_right(Sprite sp);
     bool can_go_left(Sprite sp);
+    bool has_lost = false;
+    bool has_won = false;
     int score;
     void render_rewards(RenderWindow &window);
     void update_rewards();
@@ -68,4 +73,5 @@ private:
     Music music;
     void add_terrain_bound(vector <string> &lines, int row, int col, int dx, int dy);
     void check_enemy_collisions(Enemy *enemy);
+    void activate_gameover_mode();
 };

@@ -23,14 +23,16 @@ void System::run(){
         update();
         render();
     }
+    for(int i = 0; i < LEVEL_COUNT ; i++){
+        delete levels[i];
+    }
+    exit(0);
 }
 
 void System::handle_key_down(Keyboard::Key key){
     if(key == Keyboard::Key::Escape){
-        delete levels[current_level_id];
         window.close();
-        is_closed = true;
-        exit(0);
+        return;
     }
     switch(state){
         case(IN_GAME):
@@ -94,6 +96,13 @@ void System::update(){
     switch(state){
         case(IN_GAME):
             levels[current_level_id]->update();
+            if(levels[current_level_id]->check_lost()){
+                delete levels[current_level_id];
+                levels[current_level_id] = new Level;
+                state = GAMEOVER_SCREEN;
+                accumulator = Time::Zero;
+                clock.restart();
+            }
             break;
         case(PAUSE_MENU):
             break;
@@ -104,6 +113,12 @@ void System::update(){
         case(VICTORY_SCREEN):
             break;
         case(GAMEOVER_SCREEN):
+            accumulator += clock.restart();
+            game_over_tab->update();
+            if(accumulator > gameover_duration){
+                game_over_tab->stop();
+                state = MAIN_MENU;
+            }
             break;
         case(CREDITS):
             break;
@@ -125,6 +140,7 @@ void System::render(){
         case(VICTORY_SCREEN):
             break;
         case(GAMEOVER_SCREEN):
+            game_over_tab->render(window);
             break;
         case(CREDITS):
             break;
