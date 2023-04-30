@@ -23,6 +23,10 @@ bool Cherry::is_hittable(){
     return state == cherry::IDLE;
 }
 
+bool Cherry::is_lethal(){
+    return 0;
+}
+
 bool Cherry::is_killable(){
     return state == cherry::MOVING;
 }

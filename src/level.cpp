@@ -157,7 +157,7 @@ void Level::check_enemy_collisions(Enemy* enemy){
             enemy->handle_collision(bound), enemy->reverse();
     Sprite sp = enemy->get_sprite();
     sp.move(enemy->get_width() * enemy->get_direction(), 0);
-    if(will_fall(sp) or nex.left == leftmost_point or nex.left + nex.width == rightmost_point)
+    if((will_fall(sp) and !will_fall(enemy->get_sprite())) or nex.left == leftmost_point or nex.left + nex.width == rightmost_point)
         enemy->reverse();
 }
 
@@ -175,7 +175,7 @@ void Level::check_cherry_collisions(Cherry* cherry){
     if(will_fall(sp))
         cherry->fall();
     for(Enemy* e : enemies){
-        if(nex.intersects(e->get_rect()) and e->is_hittable() 
+        if(nex.intersects(e->get_rect()) and e->is_lethal() 
             and e->get_display() and cherry->is_killable()){
             cherry->get_killed();
             break;
@@ -342,6 +342,8 @@ void Level::render(RenderWindow &window){
     render_score(window);
     render_hp(window, player->get_hp());
     render_compass(window);
+    pause.set_position({view.getCenter().x, view.getCenter().y});
+    pause.render(window);
 }
 
 void Level::render_terrain(RenderWindow &window){

@@ -4,6 +4,8 @@
 #include "simplescreen.hpp"
 #include "global_stuff.hpp"
 
+enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS};
+
 class System{
 public:
     System(int width, int height);
@@ -13,6 +15,7 @@ public:
 private:
     SimpleScreen* game_over_tab;
     SimpleScreen* victory_tab;
+    SimpleScreen* credits_tab;
     void update();
     void render();
     void handle_events();

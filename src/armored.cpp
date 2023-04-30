@@ -11,6 +11,11 @@ ArmoredEnemy::ArmoredEnemy(){
     scale = {4, 4};
     set_frame(frames[cur_frame]);
     score = 10;
+    ay = 0.3;
+}
+
+bool ArmoredEnemy::is_lethal(){
+    return state != armored_enemy::SLEEPING;
 }
 
 bool ArmoredEnemy::is_hittable(){

@@ -13,6 +13,7 @@ public:
     ArmoredEnemy();
     bool is_hittable();
     void update(double left_bound, double right_bound);
+    bool is_lethal();
 private:
     armored_enemy::State state = armored_enemy::WAKING_UP;
     vector <IntRect> frames = {{10, 69, 13, 24}, {42, 70, 13, 24}, {74, 69, 13, 24}, {106, 70, 13, 24},

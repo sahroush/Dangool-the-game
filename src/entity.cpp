@@ -42,7 +42,6 @@ void Entity::move(float x, float y){
 
 void Entity::set_rotation(float deg){
     sprite.setRotation(deg);
-    
 }
 
 void Entity::update_position(double left_bound, double right_bound){

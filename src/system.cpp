@@ -7,10 +7,11 @@ System::System(int width, int height){
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
     }
-    current_level_id = 2; //level_select must do this.
+    current_level_id = 3; //level_select must do this.
     levels[current_level_id]->init(current_level_id);
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
+    credits_tab = new SimpleScreen("Credits:\n\n\nSoroush Sahraei\n\nParsa Daghigh", "victory.ogg", "score.ttf");
 }
 
 System::~System(){
@@ -32,13 +33,12 @@ void System::run(){
 }
 
 void System::handle_key_down(Keyboard::Key key){
-    if(key == Keyboard::Key::Escape){
-        window.close();
-        return;
-    }
     switch(state){
         case(IN_GAME):
-            levels[current_level_id] -> handle_key_down(key);
+            if(key == Keyboard::Key::Escape)
+                state = PAUSE_MENU;
+            else
+                levels[current_level_id] -> handle_key_down(key);
             break;
         case(PAUSE_MENU):
             break;

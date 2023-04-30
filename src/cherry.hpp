@@ -20,6 +20,7 @@ public:
     void be_gone();
     void get_killed();
     void fall();
+    bool is_lethal();
 private:
     cherry::State state = cherry::IDLE;
     vector <IntRect> frames = {{161, 66, 15, 14}, {130, 61, 14, 16}, {177, 67, 15, 13},

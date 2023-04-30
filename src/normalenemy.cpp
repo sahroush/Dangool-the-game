@@ -11,9 +11,14 @@ NormalEnemy::NormalEnemy(){
     scale = {4, 4};
     set_frame(frames[0]);
     score = 5;
+    ay = 0.3;
 }
 
 bool NormalEnemy::is_hittable(){
+    return state != normal_enemy::KNOCKED;
+}
+
+bool NormalEnemy::is_lethal(){
     return state != normal_enemy::KNOCKED;
 }
 

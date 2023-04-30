@@ -9,6 +9,7 @@
 #include "armored.hpp"
 #include "normalenemy.hpp"
 #include "cherry.hpp"
+#include "button.hpp"
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
 const Vector2f COMPASS_SCALE = {3.f, 3.f};
@@ -38,6 +39,7 @@ protected:
 
 private:
     Player* player;
+    Button pause = Button("Pause");
     void check_enemy_interactions();
     void read_map(string map_path);
     void render_terrain(RenderWindow &window);

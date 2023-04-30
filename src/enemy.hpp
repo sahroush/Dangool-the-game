@@ -14,6 +14,7 @@ public:
     bool is_moving();
     int get_score();
     virtual bool is_hittable() = 0;
+    virtual bool is_lethal() = 0;
 protected:
     int hp;
     int score;

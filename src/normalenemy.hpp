@@ -14,6 +14,7 @@ class NormalEnemy : public Enemy{
 public:
     NormalEnemy();
     bool is_hittable();
+    bool is_lethal();
     void update(double left_bound, double right_bound);
     void get_hit();
 private:
