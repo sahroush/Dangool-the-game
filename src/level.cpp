@@ -454,7 +454,7 @@ void Level::find_sprite_bounds(const vector<Entity*>& sprites){
     }
 }
 
-void Level::adjust_view(){
+void Level::adjust_view(){  
     double x = player->get_center().x, y = player->get_center().y;
     x = max(x, leftmost_point + WIDTH/2.f);
     x = min(x, rightmost_point - WIDTH/2.f);
