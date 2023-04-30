@@ -37,7 +37,7 @@ void NormalEnemy::update_avatar(){
     int prev_h = get_height();
     switch(state){
         case(normal_enemy::STAGE1):
-            vx = normal_enemy::SPEED * direction;
+            vx = normal_enemy::TANK_SPEED * direction;
             set_frame(frames[cur_frame = calc_frame()], direction>0);
             break;
         case(normal_enemy::KNOCKED):
@@ -51,7 +51,7 @@ void NormalEnemy::update_avatar(){
             }
             break;
         case(normal_enemy::STAGE2):
-            vx = normal_enemy::SPEED * direction;
+            vx = normal_enemy::GNOME_SPEED * direction;
             set_frame(frames[cur_frame = calc_frame()], direction<0);
             break;
     }
