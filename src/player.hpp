@@ -43,6 +43,7 @@ public:
     bool has_hit_enemy(FloatRect enemy);
     void handle_kill();
     bool is_immune();
+    void handle_walking_on_enemy(FloatRect enemy);
 protected:
     
 private:

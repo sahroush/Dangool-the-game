@@ -66,6 +66,14 @@ bool Player::has_hit_enemy(FloatRect enemy){
     return 0;
 }
 
+void Player::handle_walking_on_enemy(FloatRect enemy){
+    FloatRect me = sprite.getGlobalBounds();
+    me = find_first_collision(me, enemy);
+    if(check_bottom_collision(me, enemy)){
+        vy = -player::JUMP_STRENGTH/2.f;
+    }
+}
+
 void Player::handle_kill(){
     vy = -player::JUMP_STRENGTH/2.f;
     kill_sound.play();

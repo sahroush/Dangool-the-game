@@ -4,7 +4,7 @@
 
 use `make run` to compile and run the game
 
-Prerequisite: c++ SFML
+Prerequisite: C++ SFML
 ```
 sudo apt-get install libsfml-dev
 ```

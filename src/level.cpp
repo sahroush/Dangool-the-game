@@ -48,11 +48,16 @@ void Level::check_enemy_interactions(){
                 e->get_hit();
                 score += e->get_score();
                 player->handle_kill();
+                player->handle_collision(rect);
             }
             else if(!player->is_immune()){
                 player->get_hit();
+                player->handle_collision(rect);
             }
-            player->handle_collision(rect);
+            else if(player->is_immune()){
+                player->handle_walking_on_enemy(rect);
+                player->handle_collision(rect);
+            }
         }   
     }
 }
