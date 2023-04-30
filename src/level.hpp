@@ -52,6 +52,7 @@ private:
     double leftmost_point, rightmost_point, highest_point, lowest_point;
     Waypoint* teleporter;
     View view;
+    int remaining_cherry_count = 0;
     void add_terrain();
     void add_stuff(int width, int height);
     void adjust_view();
@@ -81,6 +82,7 @@ private:
     void add_terrain_bound(int row, int col, int dx, int dy);
     void check_enemy_collisions(Enemy *enemy);
     void activate_gameover_mode();
+    void activate_victory_mode();
     void render_cherries(RenderWindow &window);
     void check_cherry_interactions();
     void check_cherry_collisions(Cherry* cherry);

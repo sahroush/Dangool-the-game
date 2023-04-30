@@ -64,7 +64,6 @@ void Level::render_compass(RenderWindow& window){
     auto view_cen = view.getCenter();
     compass->set_position(view_cen.x + WIDTH/2.f - level::MARGIN, view_cen.y - HEIGHT/2.f + level::MARGIN);
     int rotation = compass->get_sprite().getRotation();
-    cout << rotation << endl;
     compass->render(window);
 }
 
@@ -138,6 +137,11 @@ void Level::check_player_collisions(){
     for(auto bound : terrain_bounds)
         if(nex.intersects(bound))
             player->handle_collision(bound);
+    if(nex.intersects(teleporter->get_rect())){
+        if(remaining_cherry_count == 0){
+            activate_victory_mode();
+        }
+    }
     check_enemy_interactions();
     check_cherry_interactions();
 }
@@ -179,6 +183,7 @@ void Level::check_cherry_collisions(Cherry* cherry){
         portal_sound.play();
         cherry->be_gone();
         score += cherry->get_score();
+        remaining_cherry_count--;
     }
 }
 
@@ -219,6 +224,12 @@ bool Level::can_go_right(Sprite sp){
     return 1;
 }
 
+
+void Level::activate_victory_mode(){
+    has_won = true;
+    music.stop();
+}
+
 void Level::activate_gameover_mode(){
     has_lost = true;
     music.stop();
@@ -248,6 +259,9 @@ void Level::update(){
     teleporter->update();
     update_music();
     update_compass();
+    if(has_won){
+        return;
+    }   
 }
 
 void Level::update_rewards(){
@@ -403,6 +417,7 @@ void Level::add_stuff(int width, int height){
             if(c == 'O'){
                 cherries.push_back(new Cherry);
                 cherries.back()->set_initial_pos({j*width, (i+1)*height-cherries.back()->get_height()});
+                remaining_cherry_count++;
             }
         }
     }
