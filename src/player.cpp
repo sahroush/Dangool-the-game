@@ -70,12 +70,12 @@ void Player::handle_walking_on_enemy(FloatRect enemy){
     FloatRect me = sprite.getGlobalBounds();
     me = find_first_collision(me, enemy);
     if(check_bottom_collision(me, enemy)){
-        vy = -player::JUMP_STRENGTH/2.f;    
+        vy = -player::JUMP_STRENGTH;    
     }
 }
 
 void Player::handle_kill(){
-    vy = -player::JUMP_STRENGTH/2.f;
+    vy = -player::JUMP_STRENGTH;
     kill_sound.play();
     kill_sound.pause();
     kill_sound.setPlayingOffset(seconds(0.3));
@@ -164,6 +164,7 @@ int Player::get_hp(){
 }
 
 void Player::get_hit(){
+    vy = -player::JUMP_STRENGTH;
     hp--;
     accumulator = Time::Zero;
     screaming_sound.play();

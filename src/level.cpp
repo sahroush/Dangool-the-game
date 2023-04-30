@@ -50,7 +50,10 @@ void Level::check_cherry_interactions(){
                 player->handle_collision(rect);
             }
             else if(c->is_hittable()){
-                player->handle_collision(rect);
+                if(player->has_stomped(rect))
+                    player->handle_walking_on_enemy(rect);
+                else
+                    player->handle_collision(rect);
             }
         }
     }

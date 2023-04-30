@@ -22,8 +22,8 @@ System::~System(){
 void System::run(){
     while (window.isOpen()){
         handle_events();
-        update();
-        render();
+        if(window.isOpen())update();
+        if(window.isOpen())render();
     }
     for(int i = 0; i < LEVEL_COUNT ; i++){
         delete levels[i];
@@ -77,7 +77,7 @@ void System::handle_key_up(Keyboard::Key key){
 
 void System::handle_events(){
     Event event;
-    while (window.pollEvent(event)){
+    while (window.pollEvent(event) and window.isOpen()){
         switch(event.type){
             case(Event::Closed):
                 window.close();
