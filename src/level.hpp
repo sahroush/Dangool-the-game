@@ -48,8 +48,8 @@ private:
     double leftmost_point, rightmost_point, highest_point, lowest_point;
     Waypoint* teleporter;
     View view;
-    void add_terrain(vector <string> &lines);
-    void add_stuff(vector <string> &lines, int width, int height);
+    void add_terrain();
+    void add_stuff(int width, int height);
     void adjust_view();
     void check_collisions();
     void check_player_collisions();
@@ -63,7 +63,7 @@ private:
     void update_rewards();
     void render_score(RenderWindow &window);
     void render_hp(RenderWindow &window, int hp);
-    void find_terrain_bounds(vector <string> &lines);
+    void find_terrain_bounds();
     Font score_font;
     Text score_text;
     Texture heart_texture;
@@ -74,11 +74,15 @@ private:
     void render_enemies(RenderWindow &window);
     void update_enemies();
     Music music;
-    void add_terrain_bound(vector <string> &lines, int row, int col, int dx, int dy);
+    void add_terrain_bound(int row, int col, int dx, int dy);
     void check_enemy_collisions(Enemy *enemy);
     void activate_gameover_mode();
     void render_cherries(RenderWindow &window);
     void check_cherry_interactions();
     void check_cherry_collisions(Cherry* cherry);
     void update_cherries();
+    int get_block_type(int x, int y);
+    bool is_terrain(int x, int y);
+    vector <string> lines;
+    vector <IntRect> terrain_frames = {};
 };

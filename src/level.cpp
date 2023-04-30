@@ -281,7 +281,7 @@ void Level::render_terrain(RenderWindow &window){
         tr->render(window);
 }
 
-void Level::add_terrain_bound(vector <string> &lines, int row, int col, int dx, int dy){
+void Level::add_terrain_bound(int row, int col, int dx, int dy){
     FloatRect res(col*dx, row*dy, dx, 0);
     for(int i = row ; i < (int)lines.size() ; i ++){
         if(int(lines[i].size()) > col and lines[i][col] == '.')
@@ -292,14 +292,14 @@ void Level::add_terrain_bound(vector <string> &lines, int row, int col, int dx, 
     terrain_bounds.push_back(res);
 }
 
-void Level::find_terrain_bounds(vector <string> &lines){
+void Level::find_terrain_bounds(){
     int dx = terrain.back()->get_width(), dy = terrain.back()->get_height();
     for(int i = 0 ; i < (int)lines.size() ; i ++){
         for(int j = 0 ; j < (int)lines[i].size() ; j ++){
             char c = lines[i][j];
             if(c == '.'){
                 if(i == 0 or !(int(lines[i-1].size()) > j and lines[i-1][j] == '.'))  
-                    add_terrain_bound(lines, i, j, dx, dy);
+                    add_terrain_bound(i, j, dx, dy);
             }
         }
     }
@@ -311,7 +311,7 @@ void Level::init(int level){
     player = new Player(teleporter->get_position().x, teleporter->get_position().y);
 }
 
-void Level::add_terrain(vector <string> &lines){
+void Level::add_terrain(){
     for(int i = 0 ; i < (int)lines.size() ; i ++){
         for(int j = 0 ; j < (int)lines[i].size() ; j ++){
             char c = lines[i][j];
@@ -323,7 +323,7 @@ void Level::add_terrain(vector <string> &lines){
     }
 }
 
-void Level::add_stuff(vector <string> &lines, int width, int height){
+void Level::add_stuff(int width, int height){
     for(int i = 0 ; i < (int)lines.size() ; i ++){
         for(int j = 0 ; j < (int)lines[i].size() ; j ++){
             char c = lines[i][j];
@@ -356,15 +356,14 @@ void Level::add_stuff(vector <string> &lines, int width, int height){
 }
 
 void Level::read_map(string map_path){
-    vector <string> lines;
     ifstream file(map_path);
     std::string line;
     while (std::getline(file, line)) { 
         lines.push_back(line);
     }
-    add_terrain(lines);
-    add_stuff(lines, terrain.back()->get_width(), terrain.back()->get_height());
-    find_terrain_bounds(lines);
+    add_terrain();
+    add_stuff(terrain.back()->get_width(), terrain.back()->get_height());
+    find_terrain_bounds();
 }
 
 void Level::find_sprite_bounds(const vector<Entity*>& sprites){
