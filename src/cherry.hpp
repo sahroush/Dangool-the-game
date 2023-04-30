@@ -11,7 +11,8 @@ namespace cherry{
 
 class Cherry : public Enemy{
 public:
-    Cherry(Vector2f pos);
+    Cherry();
+    void set_initial_pos(Vector2f pos);
     bool is_hittable();
     bool is_killable();
     void update(double left_bound, double right_bound);

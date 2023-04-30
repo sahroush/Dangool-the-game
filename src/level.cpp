@@ -345,7 +345,8 @@ void Level::add_stuff(vector <string> &lines, int width, int height){
                 enemies.back()->set_position(j*width, (i+1)*height-enemies.back()->get_height());
             }
             if(c == 'O'){
-                cherries.push_back(new Cherry({j*width, (i+1)*height-enemies.back()->get_height()}));
+                cherries.push_back(new Cherry);
+                cherries.back()->set_initial_pos({j*width, (i+1)*height-cherries.back()->get_height()});
             }
         }
     }

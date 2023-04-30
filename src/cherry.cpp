@@ -1,6 +1,6 @@
 #include "cherry.hpp"
 
-Cherry::Cherry(Vector2f pos){
+Cherry::Cherry(){
     if (!texture->loadFromFile(PICS_PATH + "mobs.png")) {
         throw runtime_error("couldn't read mobs sprite");
     }
@@ -10,10 +10,13 @@ Cherry::Cherry(Vector2f pos){
     scale = {3, 3};
     set_frame(frames[0]);
     score = 30;
-    initial_pos = pos;
-    sprite.setPosition(pos);
     ay = cherry::GRAVITY;
     direction = -1;
+}
+
+void Cherry::set_initial_pos(Vector2f pos){
+    initial_pos = pos;
+    sprite.setPosition(pos);
 }
 
 bool Cherry::is_hittable(){
