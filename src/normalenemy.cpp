@@ -78,7 +78,6 @@ void NormalEnemy::get_hit(){
             sprite.move(sprite.getGlobalBounds().width/2.f, 0);
             break;
         case(normal_enemy::STAGE2):
-            //RIP ;'(
             break;
     }
 }

@@ -11,12 +11,61 @@ Level::Level(){
     if (!score_font.loadFromFile(FONTS_PATH + "score.ttf")) {
         throw runtime_error("Could not load score font");
     }
+    if(!portal_sound_buffer.loadFromFile(AUDIO_PATH + "portal.wav")){
+        throw runtime_error("Could not load portal sound");
+    }
+    portal_sound.setBuffer(portal_sound_buffer);
     view = View(FloatRect(0.0f, 0.0f, WIDTH, HEIGHT));
     score = 0;
     score_text.setFont(score_font);
     score_text.setCharacterSize(32);
     init_heart();
     init_music();
+    init_compass();
+}
+
+void Level::init_compass(){
+    compass = new Entity("mobs.png", COMPASS_SCALE);
+    compass->set_frame({130, 29, 12, 19});
+}
+
+void Level::update_compass(){
+    auto player_pos = player->get_position();
+    Vector2f cherry_pos;
+    for(Cherry* c : cherries){
+        if(c->get_display()){
+            cherry_pos = c->get_position();
+            break;
+        }
+    }
+    float dx = cherry_pos.x - player_pos.x;
+    float dy = cherry_pos.y - player_pos.y;
+    float slope = dx/dy;
+    float degree = atan(slope) * 180 / PI;
+    if(dy >= 0 and dx >= 0){
+        degree = -degree;
+        compass->set_rotation(degree);
+    }
+    else if(dy < 0 and dx >= 0){
+        degree = 180 - degree;
+        compass->set_rotation(degree);
+    }
+    else if(dy < 0 and dx < 0){
+        degree = 180 - degree;
+        compass->set_rotation(degree);
+    }
+    else{
+        degree = -degree;
+        compass->set_rotation(degree);
+    }
+}
+
+void Level::render_compass(RenderWindow& window){
+    auto view_cen = view.getCenter();
+    compass->set_position(view_cen.x + WIDTH/2.f - level::MARGIN, view_cen.y - HEIGHT/2.f + level::MARGIN);
+    int rotation = compass->get_sprite().getRotation();
+    cout << rotation << endl;
+    compass->render(window);
 }
 
 Level::~Level(){
@@ -127,6 +176,7 @@ void Level::check_cherry_collisions(Cherry* cherry){
         }
     }
     if(cherry->collides_with(teleporter->get_sprite())){
+        portal_sound.play();
         cherry->be_gone();
         score += cherry->get_score();
     }
@@ -197,6 +247,7 @@ void Level::update(){
     update_cherries();
     teleporter->update();
     update_music();
+    update_compass();
 }
 
 void Level::update_rewards(){
@@ -274,6 +325,7 @@ void Level::render(RenderWindow &window){
     window.setView(view);
     render_score(window);
     render_hp(window, player->get_hp());
+    render_compass(window);
 }
 
 void Level::render_terrain(RenderWindow &window){
@@ -309,6 +361,7 @@ void Level::init(int level){
     read_map(MAPS_PATH + to_string(level));
     find_sprite_bounds(terrain);
     player = new Player(teleporter->get_position().x, teleporter->get_position().y);
+    portal_sound.play();
 }
 
 void Level::add_terrain(){

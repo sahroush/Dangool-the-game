@@ -81,7 +81,6 @@ void Cherry::update(double left_bound, double right_bound){
 
 void Cherry::be_gone(){
     display = false;
-    //add music
 }
 
 void Cherry::get_hit(){

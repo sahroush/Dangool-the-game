@@ -11,6 +11,7 @@
 #include "cherry.hpp"
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
+const Vector2f COMPASS_SCALE = {3.f, 3.f};
 const int BLOCK_WIDTH = 11, BLOCK_HEIGHT = 11;
 const float SMALL_MOVEMENT = 0.1;
 
@@ -20,6 +21,7 @@ namespace level{
     const int HEART_X = 2;
     const int HEART_Y = 51;
     const Vector2f HEART_SCALE = {5, 5};
+    const int MARGIN = 85;
 }
 class Level{
 public:
@@ -44,6 +46,7 @@ private:
     vector <Enemy*> enemies;
     vector <Cherry*> cherries;
     vector <FloatRect> terrain_bounds;
+    Entity* compass;
     Texture block_texture;
     void find_sprite_bounds(const vector<Entity*>& sprites);
     double leftmost_point, rightmost_point, highest_point, lowest_point;
@@ -82,9 +85,15 @@ private:
     void check_cherry_interactions();
     void check_cherry_collisions(Cherry* cherry);
     void update_cherries();
-    int get_block_type(int x, int y);
     bool is_terrain(int x, int y);
     vector <string> lines;
     vector <IntRect> terrain_frames = {};
-    IntRect get_block_frame(int x, int y);
+    IntRect get_block_frame(int x, int y); 
+    SoundBuffer portal_sound_buffer;
+    Sound portal_sound; 
+    void init_compass();
+    void update_compass();
+    void render_compass(RenderWindow &window);
 };
+
+//todo: add better scream for player

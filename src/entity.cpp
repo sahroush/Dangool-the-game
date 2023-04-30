@@ -21,6 +21,10 @@ Entity::Entity(Texture* tex, Vector2f scale_){
     sprite.setScale(scale);
 }
 
+void Entity::set_origin(float x, float y){
+    sprite.setOrigin(x, y);
+}
+
 void Entity::mirror_sprite_horizontally() {
     Vector2f pos = sprite.getPosition();
     sprite.scale(-1, 1);
@@ -30,6 +34,15 @@ void Entity::mirror_sprite_horizontally() {
         sprite.setOrigin(0, sprite.getOrigin().y);
     }
     sprite.setPosition(pos);
+}
+
+void Entity::move(float x, float y){
+    sprite.move(x, y);
+}
+
+void Entity::set_rotation(float deg){
+    sprite.setRotation(deg);
+    
 }
 
 void Entity::update_position(double left_bound, double right_bound){

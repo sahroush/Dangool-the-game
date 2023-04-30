@@ -8,7 +8,7 @@ class System{
 public:
     System(int width, int height);
     void run();
-    ~System();//TBD
+    ~System();
     RenderWindow window;
 private:
     SimpleScreen* game_over_tab;

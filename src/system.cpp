@@ -6,8 +6,8 @@ System::System(int width, int height){
     state = IN_GAME; //must start with menu
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
-    }//this can be done outside a for loop
-    current_level_id = 0; //level_select must do this.
+    }
+    current_level_id = 2; //level_select must do this.
     levels[current_level_id]->init(current_level_id);
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");

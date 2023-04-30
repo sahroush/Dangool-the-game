@@ -24,6 +24,10 @@ public:
     double get_height();
     double get_width();
     FloatRect get_rect();
+    void set_origin(float x, float y);
+    void set_frame(IntRect frame, bool mirror = 0);
+    void set_rotation(float deg);
+    void move(float x, float y);
 protected:
     double vx = 0, vy = 0, ax = 0, ay = 0;
     Sprite sprite, external_sprite;
@@ -32,7 +36,6 @@ protected:
     void mirror_sprite_horizontally();
     void rotate90();
     Vector2f scale;
-    void set_frame(IntRect frame, bool mirror = 0);
     FloatRect find_first_collision(FloatRect me, FloatRect terrain);
     FloatRect apply_time_to_rect(FloatRect rect, double time);
     bool check_top_collision(FloatRect me, FloatRect block);
