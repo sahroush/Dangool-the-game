@@ -61,6 +61,8 @@ void Level::update_compass(){
 }
 
 void Level::render_compass(RenderWindow& window){
+    if(remaining_cherry_count == 0)
+        return;
     auto view_cen = view.getCenter();
     compass->set_position(view_cen.x + WIDTH/2.f - level::MARGIN, view_cen.y - HEIGHT/2.f + level::MARGIN);
     int rotation = compass->get_sprite().getRotation();

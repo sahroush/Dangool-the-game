@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -fsanitize=address -fsanitize=undefined
+CXXFLAGS = -std=c++11 -Wall #-fsanitize=address -fsanitize=undefined
 LFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 SRC_FILES = $(wildcard ./src/*.cpp)
 OBJ_FILES = $(SRC_FILES:./src/%.cpp=./obj/%.o)
