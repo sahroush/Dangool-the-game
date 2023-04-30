@@ -8,6 +8,7 @@
 #include "enemy.hpp"
 #include "armored.hpp"
 #include "normalenemy.hpp"
+#include "cherry.hpp"
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
 const float SMALL_MOVEMENT = 0.1;
@@ -22,7 +23,7 @@ namespace level{
 class Level{
 public:
     Level();
-    ~Level(); //TBD
+    ~Level(); 
     void update();
     void render(RenderWindow &window);
     void init(int level);
@@ -40,6 +41,7 @@ private:
     vector <Entity*> terrain;
     vector <Reward*> rewards;
     vector <Enemy*> enemies;
+    vector <Cherry*> cherries;
     vector <FloatRect> terrain_bounds;
     Texture block_texture;
     void find_sprite_bounds(const vector<Entity*>& sprites);
@@ -75,4 +77,8 @@ private:
     void add_terrain_bound(vector <string> &lines, int row, int col, int dx, int dy);
     void check_enemy_collisions(Enemy *enemy);
     void activate_gameover_mode();
+    void render_cherries(RenderWindow &window);
+    void check_cherry_interactions();
+    void check_cherry_collisions(Cherry* cherry);
+    void update_cherries();
 };

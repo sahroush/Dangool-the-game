@@ -57,7 +57,7 @@ void Player::update_avatar(){
     }
 }
 
-bool Player::has_hit_enemy(FloatRect enemy){
+bool Player::has_stomped(FloatRect enemy){
     FloatRect me = sprite.getGlobalBounds();
     me = find_first_collision(me, enemy);
     if(check_bottom_collision(me, enemy)){
@@ -70,7 +70,7 @@ void Player::handle_walking_on_enemy(FloatRect enemy){
     FloatRect me = sprite.getGlobalBounds();
     me = find_first_collision(me, enemy);
     if(check_bottom_collision(me, enemy)){
-        vy = -player::JUMP_STRENGTH/2.f;
+        vy = -player::JUMP_STRENGTH/2.f;    
     }
 }
 

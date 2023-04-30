@@ -37,6 +37,25 @@ void Level::init_music(int id){
     music.setLoop(true);
 }
 
+void Level::check_cherry_interactions(){
+    FloatRect nex = player->get_next_frame_rect(leftmost_point, rightmost_point);
+    for(auto c : cherries){
+        if(!c->get_display())
+            continue;
+        auto rect = c->get_rect();
+        if(nex.intersects(rect)){
+            if(player->has_stomped(rect) and c->is_hittable() and !player->is_immune()){
+                c->get_hit();
+                player->handle_kill();
+                player->handle_collision(rect);
+            }
+            else if(c->is_hittable()){
+                player->handle_collision(rect);
+            }
+        }
+    }
+}
+
 void Level::check_enemy_interactions(){
     FloatRect nex = player->get_next_frame_rect(leftmost_point, rightmost_point);
     for(auto e : enemies){
@@ -44,7 +63,7 @@ void Level::check_enemy_interactions(){
             continue;
         auto rect = e->get_rect();
         if(nex.intersects(rect)){
-            if(player->has_hit_enemy(rect) and e->is_hittable() and !player->is_immune()){
+            if(player->has_stomped(rect) and e->is_hittable() and !player->is_immune()){
                 e->get_hit();
                 score += e->get_score();
                 player->handle_kill();
@@ -68,6 +87,7 @@ void Level::check_player_collisions(){
         if(nex.intersects(bound))
             player->handle_collision(bound);
     check_enemy_interactions();
+    check_cherry_interactions();
 }
 
 void Level::check_enemy_collisions(Enemy* enemy){
@@ -83,10 +103,37 @@ void Level::check_enemy_collisions(Enemy* enemy){
         enemy->reverse();
 }
 
+void Level::check_cherry_collisions(Cherry* cherry){
+    if(!cherry->get_display())
+        return;
+    FloatRect nex = cherry->get_next_frame_rect(leftmost_point, rightmost_point);
+    for(auto bound : terrain_bounds)
+        if(nex.intersects(bound))
+            cherry->handle_collision(bound), cherry->reverse();
+    if(nex.left == leftmost_point or nex.left + nex.width == rightmost_point)
+        cherry->reverse();
+    Sprite sp = cherry->get_sprite();
+    sp.move(SMALL_MOVEMENT, 0);
+    if(will_fall(sp))
+        cherry->fall();
+    for(Enemy* e : enemies){
+        if(nex.intersects(e->get_rect()) and e->is_hittable() 
+            and e->get_display() and cherry->is_killable()){
+            cherry->get_killed();
+            break;
+        }
+    }
+    if(cherry->collides_with(teleporter->get_sprite())){
+        cherry->be_gone();
+        score += cherry->get_score();
+    }
+}
 
 void Level::check_collisions(){
     for(Enemy *e : enemies)
         check_enemy_collisions(e);
+    for(Cherry *c : cherries)
+        check_cherry_collisions(c);
     check_player_collisions();
 }
 
@@ -144,6 +191,7 @@ void Level::update(){
     player->update(leftmost_point, rightmost_point);
     update_enemies();
     update_rewards();
+    update_cherries();
     teleporter->update();
     update_music();
 }
@@ -164,12 +212,17 @@ void Level::update_enemies(){
     for(Enemy* e : enemies){
         if(e->is_alive()){
             e->update(leftmost_point, rightmost_point);
-            if(player->collides_with(e->get_sprite())){
-                //do stoopid shit here
-            }
         }
     }
 }   
+
+void Level::update_cherries(){
+    for(Cherry* c : cherries){
+        if(c->get_display()){
+            c->update(leftmost_point, rightmost_point);
+        }
+    }
+} 
 
 void Level::render_rewards(RenderWindow &window){
     for(Reward* r : rewards)
@@ -181,6 +234,12 @@ void Level::render_enemies(RenderWindow &window){
     for(Enemy* e : enemies)
         if(e->get_display())
             e->render(window);
+}
+
+void Level::render_cherries(RenderWindow &window){
+    for(Cherry* c : cherries)
+        if(c->get_display())
+            c->render(window);
 }
 
 void Level::render_score(RenderWindow &window){
@@ -204,6 +263,7 @@ void Level::render_hp(RenderWindow &window, int hp){
 void Level::render(RenderWindow &window){
     teleporter->render(window);
     render_terrain(window);
+    render_cherries(window);
     render_rewards(window);
     render_enemies(window);
     player->render(window);
@@ -283,6 +343,9 @@ void Level::add_stuff(vector <string> &lines, int width, int height){
             if(c == 'E'){
                 enemies.push_back(new NormalEnemy);
                 enemies.back()->set_position(j*width, (i+1)*height-enemies.back()->get_height());
+            }
+            if(c == 'O'){
+                cherries.push_back(new Cherry({j*width, (i+1)*height-enemies.back()->get_height()}));
             }
         }
     }

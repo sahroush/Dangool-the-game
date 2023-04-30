@@ -40,7 +40,7 @@ public:
     int get_hp();
     void get_hit();
     void stop_jump();
-    bool has_hit_enemy(FloatRect enemy);
+    bool has_stomped(FloatRect enemy);
     void handle_kill();
     bool is_immune();
     void handle_walking_on_enemy(FloatRect enemy);
