@@ -11,6 +11,7 @@
 #include "cherry.hpp"
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
+const int BLOCK_WIDTH = 11, BLOCK_HEIGHT = 11;
 const float SMALL_MOVEMENT = 0.1;
 
 namespace level{
@@ -85,4 +86,5 @@ private:
     bool is_terrain(int x, int y);
     vector <string> lines;
     vector <IntRect> terrain_frames = {};
+    IntRect get_block_frame(int x, int y);
 };

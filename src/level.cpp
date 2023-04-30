@@ -436,6 +436,24 @@ void Level::handle_key_up(Keyboard::Key key){
     }
 }
 
+bool Level::is_terrain(int x, int y){
+    if(lines.size() <= x)
+        return 0;
+    if(lines[x].size() <= y)
+        return 0;
+    return lines[x][y] == '.';
+}
+
+IntRect Level::get_block_frame(int x, int y){
+    int id = 8 * is_terrain(x-1, y);
+    id += 4 * is_terrain(x, y+1);
+    id += 2 * is_terrain(x+1, y);
+    id += 1*is_terrain(x, y-1);
+    IntRect ans;
+    ans.width = BLOCK_WIDTH;
+    ans.height = BLOCK_HEIGHT;
+}
+
 void Level::init_heart(){
     heart_sprite = new Sprite;
     heart_sprite->setTexture(heart_texture);
