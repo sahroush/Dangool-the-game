@@ -197,6 +197,20 @@ void Level::check_collisions(){
     check_player_collisions();
 }
 
+void Level::handle_mouse_press(Vector2f pos){
+    pause.get_clicked(convert_to_local_position(pos));
+}
+
+Vector2f Level::convert_to_local_position(Vector2f pos){
+    pos.x += view.getCenter().x - WIDTH/2.f;
+    pos.y += view.getCenter().y - HEIGHT/2.f;
+    return pos;
+}
+
+void Level::handle_mouse_release(Vector2f pos){
+    pause.get_unclicked(convert_to_local_position(pos));
+}
+
 bool Level::will_fall(Sprite sp){
     sp.move(0, SMALL_MOVEMENT);
     for(Entity* tr : terrain)
@@ -245,6 +259,10 @@ bool Level::check_won(){
     return has_won;
 }
 
+void Level::unpause(){
+    is_paused = false;
+}
+
 void Level::update(){
     if(player->get_hp() == 0){
         activate_gameover_mode();
@@ -264,6 +282,8 @@ void Level::update(){
     if(has_won){
         return;
     }   
+    if(pause.get_status())
+        is_paused = true;
 }
 
 void Level::update_rewards(){
@@ -337,7 +357,7 @@ void Level::render(RenderWindow &window){
     render_rewards(window);
     render_enemies(window);
     player->render(window);
-    adjust_view();
+    adjust_view(); 
     window.setView(view);
     render_score(window);
     render_hp(window, player->get_hp());
@@ -483,10 +503,17 @@ void Level::handle_key_down(Keyboard::Key key){
             if(can_go_right(player->get_sprite()))
                 player->go_right();
             break;
+        case(Keyboard::Escape):
+            is_paused = true;
+            break;  
         default:
             break;
     }
 }  
+
+bool Level::check_paused(){
+    return is_paused;
+}
 
 void Level::handle_key_up(Keyboard::Key key){
     switch(key){

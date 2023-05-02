@@ -7,7 +7,7 @@ System::System(int width, int height){
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
     }
-    current_level_id = 1; //level_select must do this.
+    current_level_id = 2; //level_select must do this.
     levels[current_level_id]->init(current_level_id);
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
@@ -35,9 +35,6 @@ void System::run(){
 void System::handle_key_down(Keyboard::Key key){
     switch(state){
         case(IN_GAME):
-            if(key == Keyboard::Key::Escape)
-                state = PAUSE_MENU;
-            else
                 levels[current_level_id] -> handle_key_down(key);
             break;
         case(PAUSE_MENU):
@@ -88,9 +85,59 @@ void System::handle_events(){
             case(Event::KeyReleased):
                 handle_key_up(event.key.code);
                 break;
+            case(Event::MouseButtonPressed):
+                handle_mouse_press(event);
+                break;
+            case(Event::MouseButtonReleased):
+                handle_mouse_release(event);
+                break;
             default:
                 break;
         }
+    }
+}
+
+void System::handle_mouse_press(Event ev){
+    if(ev.mouseButton.button == Mouse::Right)
+        return;
+    switch(state){
+        case(IN_GAME):
+            levels[current_level_id] -> handle_mouse_press({ev.mouseButton.x, ev.mouseButton.y});
+            break;
+        case(PAUSE_MENU):
+            break;
+        case(MAIN_MENU):
+            break;
+        case(LEVEL_SELECT):
+            break;
+        case(VICTORY_SCREEN):
+            break;
+        case(GAMEOVER_SCREEN):
+            break;
+        case(CREDITS):
+            break;
+    }
+}
+
+void System::handle_mouse_release(Event ev){
+    if(ev.mouseButton.button == Mouse::Right)
+        return;
+    switch(state){
+        case(IN_GAME):
+            levels[current_level_id] -> handle_mouse_release({ev.mouseButton.x, ev.mouseButton.y});
+            break;
+        case(PAUSE_MENU):
+            break;
+        case(MAIN_MENU):
+            break;
+        case(LEVEL_SELECT):
+            break;
+        case(VICTORY_SCREEN):
+            break;
+        case(GAMEOVER_SCREEN):
+            break;
+        case(CREDITS):
+            break;
     }
 }
 
@@ -111,6 +158,9 @@ void System::update(){
                 state = VICTORY_SCREEN;
                 accumulator = Time::Zero;
                 clock.restart();
+            }
+            if(levels[current_level_id]->check_paused()){
+                state = PAUSE_MENU;
             }
             break;
         case(PAUSE_MENU):

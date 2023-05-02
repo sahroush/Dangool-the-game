@@ -12,7 +12,11 @@ public:
     void render(RenderWindow &window);
     void toggle();
     void set_position(Vector2f position);
+    bool get_status();
+    void get_clicked(Vector2f position);
+    void get_unclicked(Vector2f position);
 private:
+    bool is_in_button(Vector2f position);
     Font font;
     Text text;
     Sprite pressed;
@@ -21,4 +25,5 @@ private:
     Texture depressed_texture;
     bool is_pressed = false;
     Vector2f pos;
+    bool was_pressed;
 };

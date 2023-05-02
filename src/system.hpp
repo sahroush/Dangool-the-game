@@ -31,4 +31,6 @@ private:
     Time gameover_duration = seconds(7.9f);
     Time victory_duration = seconds(8.0f);
     Time accumulator = Time::Zero;
+    void handle_mouse_press(Event ev);
+    void handle_mouse_release(Event ev);
 };

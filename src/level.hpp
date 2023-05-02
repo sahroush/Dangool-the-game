@@ -35,9 +35,14 @@ public:
     void handle_key_up(Keyboard::Key key);
     bool check_lost();
     bool check_won();
+    void handle_mouse_press(Vector2f pos);
+    void handle_mouse_release(Vector2f pos);
+    bool check_paused();
+    void unpause();
 protected:
 
 private:
+    bool is_paused = false;
     Player* player;
     Button pause = Button("Pause");
     void check_enemy_interactions();
@@ -98,6 +103,7 @@ private:
     void init_compass();
     void update_compass();
     void render_compass(RenderWindow &window);
+    Vector2f convert_to_local_position(Vector2f pos);
 };
 
 //todo: add better scream for player

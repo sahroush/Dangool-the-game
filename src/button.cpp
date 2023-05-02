@@ -23,13 +23,22 @@ Button::Button(string message, string font_name, int text_size){
     scale.x = (text.getGlobalBounds().width + 2*button::MARGIN) / depressed.getGlobalBounds().width;
     scale.y = (text.getGlobalBounds().height + 2*button::MARGIN) / depressed.getGlobalBounds().height;
     depressed.setScale(scale);
-    text.setOutlineColor(Color::Black);
+    depressed.setColor(Color(255, 0, 255));
+    pressed.setColor(Color(240, 0, 115));
+    text.setOutlineColor(Color(64, 64, 64));
     text.setOutlineThickness(1);
+    was_pressed = false;
 }
 
 void Button::set_position(Vector2f position){
     pos = position;
 }   
+
+bool Button::get_status(){
+    bool tmp = was_pressed;
+    was_pressed = false;    
+    return tmp;
+}
 
 void Button::render(RenderWindow &window){
     if(is_pressed){
@@ -44,6 +53,30 @@ void Button::render(RenderWindow &window){
     window.draw(text);
 }
 
+bool Button::is_in_button(Vector2f position){
+    FloatRect button_rect;
+    button_rect.left = pos.x;
+    button_rect.top = pos.y;
+    button_rect.width = pressed.getGlobalBounds().width;
+    button_rect.height = pressed.getGlobalBounds().height;
+    return button_rect.contains(position);
+}
+
 void Button::toggle(){
     is_pressed = !is_pressed;
+}
+
+void Button::get_clicked(Vector2f position){
+    if(is_in_button(position))
+        is_pressed = true;
+    else if(is_pressed)
+            is_pressed = false, was_pressed = true;
+        
+}
+
+void Button::get_unclicked(Vector2f position){
+    if(is_in_button(position))
+        is_pressed = false, was_pressed = true;
+    else if (is_pressed)
+        is_pressed = false, was_pressed = true; 
 }
