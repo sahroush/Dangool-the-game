@@ -2,11 +2,13 @@
 
 ## Usage
 
-use `make run` to compile and run the game
+Use `make init` to initialize the compiling proccess for the first time.
+Use `make run` to compile and run the game.
 
-Prerequisite: C++ SFML
+Prerequisites: C++ SFML, python pillow
 ```
 sudo apt-get install libsfml-dev
+pip install pillow
 ```
 
 
