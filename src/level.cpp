@@ -2,7 +2,7 @@
 
 
 Level::Level(){
-    if (!block_texture.loadFromFile(PICS_PATH + "block.png")) {
+    if (!block_texture.loadFromFile(PICS_PATH + "blocks.png")) {
         throw runtime_error("couldn't read block.png");
     }//TBD: add second block, suitable for stacking
     if (!heart_texture.loadFromFile(PICS_PATH + "objects.png")) {
@@ -424,6 +424,7 @@ void Level::add_terrain(){
             char c = lines[i][j];
             if(c == '.'){
                 terrain.push_back(new Entity(&block_texture, Vector2f(BLOCK_SCALE.x, BLOCK_SCALE.y)));
+                terrain.back()->set_frame(get_block_frame(i, j));
                 terrain.back()->set_position(j*terrain.back()->get_width(), i * terrain.back()->get_height());
             }
         }
@@ -567,6 +568,9 @@ IntRect Level::get_block_frame(int x, int y){
     IntRect ans;
     ans.width = BLOCK_WIDTH;
     ans.height = BLOCK_HEIGHT;
+    ans.top = (id/4) * ans.height;
+    ans.left = (id%4) * ans.width;
+    return ans;
 }
 
 void Level::init_heart(){

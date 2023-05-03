@@ -13,7 +13,7 @@
 
 const Vector2f BLOCK_SCALE = {7.f, 7.f};
 const Vector2f COMPASS_SCALE = {3.f, 3.f};
-const int BLOCK_WIDTH = 11, BLOCK_HEIGHT = 11;
+const int BLOCK_WIDTH = 13, BLOCK_HEIGHT = 13;
 const float SMALL_MOVEMENT = 1.1;
 
 namespace level{
