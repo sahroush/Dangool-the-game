@@ -25,7 +25,7 @@ init:
 
 clean:
 	rm -rf ./obj $(BIN_NAME)
-	#rm -rf ./files/pics/bg/*.png
+	rm -rf ./files/pics/bg/*.png
 
 run: $(BIN_NAME)
 	$(BIN_NAME) #|| clear
