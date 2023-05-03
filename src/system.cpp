@@ -43,6 +43,7 @@ void System::handle_key_down(Keyboard::Key key){
             if(key == Keyboard::Escape){
                 mainmenu.stop();
                 state = EXIT;
+                exit(0);
             }
             break;
         case(LEVEL_SELECT):
@@ -88,6 +89,7 @@ void System::handle_events(){
             case(Event::Closed):
                 window.close();
                 state = EXIT;
+                exit(0);
                 break;
             case(Event::KeyPressed):
                 handle_key_down(event.key.code);
@@ -205,6 +207,7 @@ void System::update(){
             if(mainmenu.check_exit()){
                 mainmenu.stop();
                 state = EXIT;
+                exit(0);
             }
             if(mainmenu.check_start()){
                 mainmenu.stop();

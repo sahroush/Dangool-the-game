@@ -12,13 +12,13 @@ LevelSelect::LevelSelect(){
     music.setLoop(true);
     exit_button.set_position({0, 0});
     for(int i = 0 ; i < LEVEL_COUNT ; i ++){
-        levels[i] = new Button(to_string(i));
+        levels[i] = new Button("Level " + to_string(i), "score.ttf", 48);
     }
     int tot_w = levels[0]->get_width() * 3;
-    int tot_h = levels[0]->get_height() * (LEVEL_COUNT + 2)/3;
-    int base_y = (HEIGHT - tot_h)/2;
-    int base_x = (WIDTH - tot_w - 2 * levels[0]->get_margin())/2;
-    int cur_x, cur_y;
+    int tot_h = levels[0]->get_height() * ((LEVEL_COUNT + 2)/3);
+    int base_y = (HEIGHT/2 - tot_h);
+    int base_x = (WIDTH - tot_w)/2;
+    int cur_x = base_x, cur_y = base_y;
     for(int i = 0 ; i < LEVEL_COUNT ; i ++){
         if(i % 3 == 0){
             cur_x = base_x;
