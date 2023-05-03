@@ -6,6 +6,7 @@ OBJ_FILES = $(SRC_FILES:./src/%.cpp=./obj/%.o)
 BIN_NAME = bin/turtix.out
 HDR_FILES := $(wildcard ./src/*.hpp)
 MEDIA_PATH = ./files/
+SCRIPT = ./files/pics/bg/gif_to_png.py
 
 .PHONY: clean
 .PHONY: run
@@ -20,6 +21,8 @@ $(BIN_NAME): $(OBJ_FILES) $(HDR_FILES)
 
 clean:
 	rm -rf ./obj $(BIN_NAME)
+	rm -rf ./files/pics/bg/*.png
 
 run: $(BIN_NAME)
-	$(BIN_NAME)
+	python3 $(SCRIPT)
+	$(BIN_NAME) || clear

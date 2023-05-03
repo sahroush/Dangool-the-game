@@ -3,10 +3,9 @@
 #include "level.hpp"
 #include "simplescreen.hpp"
 #include "global_stuff.hpp"
+#include "mainmenu.hpp"
 
-enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS};
-
-const int BUTTON_MARGIN = 5;
+enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS, EXIT};
 
 class System{
 public:
@@ -18,6 +17,7 @@ private:
     SimpleScreen* game_over_tab;
     SimpleScreen* victory_tab;
     SimpleScreen* credits_tab;
+    MainMenu mainmenu;
     void update();
     void render();
     void handle_events();
@@ -37,6 +37,6 @@ private:
     Time accumulator = Time::Zero;
     void handle_mouse_press(Event ev);
     void handle_mouse_release(Event ev);
-    Button resume_button = Button("Resume");
-    Button main_menu_button = Button("Main Menu");
+    Button resume_button = Button("Resume", "score.ttf", 31);
+    Button main_menu_button = Button("Main Menu", "score.ttf", 25);
 };

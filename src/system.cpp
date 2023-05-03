@@ -3,12 +3,11 @@
 System::System(int width, int height){
     window.create(VideoMode(width, height), "Turtix", Style::Close);
     window.setFramerateLimit(FRAME_RATE);
-    state = IN_GAME; //must start with menu
+    state = MAIN_MENU; //must start with menu
+    mainmenu.play();
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
     }
-    current_level_id = 0; //level_select must do this. //map 1 breaks the game 
-    levels[current_level_id]->init(current_level_id);
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
     credits_tab = new SimpleScreen("Credits:\n\n\nSoroush Sahraei\n\nParsa Daghigh", "victory.ogg", "score.ttf");
@@ -21,10 +20,10 @@ System::~System(){
 }
 
 void System::run(){
-    while (window.isOpen()){
+    while (window.isOpen() and state != EXIT){
         handle_events();
-        if(window.isOpen())update();
-        if(window.isOpen())render();
+        if(window.isOpen() and state != EXIT)update();
+        if(window.isOpen() and state != EXIT)render();
     }
     for(int i = 0; i < LEVEL_COUNT ; i++){
         delete levels[i];
@@ -104,17 +103,18 @@ void System::handle_events(){
 void System::handle_mouse_press(Event ev){
     if(ev.mouseButton.button == Mouse::Right)
         return;
+    Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
     switch(state){
         case(IN_GAME):
-            levels[current_level_id] -> handle_mouse_press({ev.mouseButton.x, ev.mouseButton.y});
+            levels[current_level_id] -> handle_mouse_press(pos);
             break;
         case(PAUSE_MENU):{
-            Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
             resume_button.get_clicked(pos);
             main_menu_button.get_clicked(pos);
             break;
         }
         case(MAIN_MENU):
+            mainmenu.get_clicked(pos);
             break;
         case(LEVEL_SELECT):
             break;
@@ -130,17 +130,18 @@ void System::handle_mouse_press(Event ev){
 void System::handle_mouse_release(Event ev){
     if(ev.mouseButton.button == Mouse::Right)
         return;
+    Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
     switch(state){
         case(IN_GAME):
-            levels[current_level_id] -> handle_mouse_release({ev.mouseButton.x, ev.mouseButton.y});
+            levels[current_level_id] -> handle_mouse_release(pos);
             break;
         case(PAUSE_MENU):{
-            Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
             resume_button.get_unclicked(pos);
             main_menu_button.get_unclicked(pos);
             break;
         }
         case(MAIN_MENU):
+            mainmenu.get_unclicked(pos);
             break;
         case(LEVEL_SELECT):
             break;
@@ -186,9 +187,20 @@ void System::update(){
             }
             if(main_menu_button.get_status()){
                 state = MAIN_MENU;
+                mainmenu.play();
             }
             break;
         case(MAIN_MENU):
+            mainmenu.update();
+            if(mainmenu.check_exit()){
+                mainmenu.stop();
+                state = EXIT;
+            }
+            if(mainmenu.check_start()){
+                mainmenu.stop();
+                state = LEVEL_SELECT;
+                //play level select
+            }
             break;
         case(LEVEL_SELECT):
             break;
@@ -198,6 +210,7 @@ void System::update(){
             if(accumulator > victory_duration){
                 victory_tab->stop();
                 state = MAIN_MENU;
+                mainmenu.play();
             }
             break;
         case(GAMEOVER_SCREEN):
@@ -206,6 +219,7 @@ void System::update(){
             if(accumulator > gameover_duration){
                 game_over_tab->stop();
                 state = MAIN_MENU;
+                mainmenu.play();
             }
             break;
         case(CREDITS):
@@ -232,6 +246,7 @@ void System::render(){
             break;
         }
         case(MAIN_MENU):
+            mainmenu.render(window);
             break;
         case(LEVEL_SELECT):
             break;

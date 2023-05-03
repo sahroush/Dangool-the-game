@@ -26,6 +26,9 @@ const string PICS_PATH = "./files/pics/", MAPS_PATH = "./files/maps/", AUDIO_PAT
     FONTS_PATH = "./files/fonts/";
 const Color BLUE = Color(50, 115, 220);
 const Color PURPLE = Color(130, 50, 220);
-const Color YELLOW = Color(255, 221, 0);
+const Color YELLOW = Color(255, 248, 220);
+const int BG_CNT = 40;
+const int MENU_SPEED = 4;
+const int BUTTON_MARGIN = 5;
 
 #define debug(x) cout << x << endl, exit(0);

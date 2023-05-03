@@ -1,5 +1,9 @@
 #include "button.hpp"
 
+int Button::get_margin(){
+    return 0.2 * text.getGlobalBounds().width;
+}
+
 Button::Button(string message, string font_name, int text_size){
     text.setString(message);
     if (!font.loadFromFile(FONTS_PATH + font_name)){
@@ -15,13 +19,13 @@ Button::Button(string message, string font_name, int text_size){
     depressed.setTexture(depressed_texture);
     text.setFont(font);
     text.setCharacterSize(text_size);
-    text.setColor(Color::White);
+    text.setColor(YELLOW);
     Vector2f scale;
-    scale.x = (text.getGlobalBounds().width + 2*button::MARGIN) / pressed.getGlobalBounds().width;
-    scale.y = (text.getGlobalBounds().height + 2*button::MARGIN) / pressed.getGlobalBounds().height;
+    scale.x = (text.getGlobalBounds().width + 2*get_margin()) / pressed.getGlobalBounds().width;
+    scale.y = (text.getGlobalBounds().height + 2*get_margin()) / pressed.getGlobalBounds().height;
     pressed.setScale(scale);
-    scale.x = (text.getGlobalBounds().width + 2*button::MARGIN) / depressed.getGlobalBounds().width;
-    scale.y = (text.getGlobalBounds().height + 2*button::MARGIN) / depressed.getGlobalBounds().height;
+    scale.x = (text.getGlobalBounds().width + 2*get_margin()) / depressed.getGlobalBounds().width;
+    scale.y = (text.getGlobalBounds().height + 2*get_margin()) / depressed.getGlobalBounds().height;
     depressed.setScale(scale);
     depressed.setColor(Color(255, 0, 255));
     pressed.setColor(Color(240, 0, 115));
@@ -49,7 +53,7 @@ void Button::render(RenderWindow &window){
         depressed.setPosition(pos);
         window.draw(depressed);
     }
-    text.setPosition(pos.x + button::MARGIN, pos.y + button::MARGIN);
+    text.setPosition(pos.x + get_margin(), pos.y + get_margin());
     window.draw(text);
 }
 

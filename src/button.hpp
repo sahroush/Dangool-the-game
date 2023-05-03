@@ -2,10 +2,6 @@
 
 #include "global_stuff.hpp"
 
-namespace button{
-    const int MARGIN = 10;
-}
-
 class Button{
 public:
     Button(string message, string font_name = "score.ttf", int text_size = 25);
@@ -28,4 +24,5 @@ private:
     bool is_pressed = false;
     Vector2f pos;
     bool was_pressed;
+    int get_margin();
 };
