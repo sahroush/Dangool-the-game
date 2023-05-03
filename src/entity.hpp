@@ -47,4 +47,5 @@ protected:
     bool going_up = false;
     FloatRect find_overlap_rect(FloatRect rect1, FloatRect rect2);
     void draw_external_sprite(int x, int y, int w, int h);
+    bool moved = false;
 };

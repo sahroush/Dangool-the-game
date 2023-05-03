@@ -4,6 +4,7 @@
 #include "simplescreen.hpp"
 #include "global_stuff.hpp"
 #include "mainmenu.hpp"
+#include "levelselect.hpp"
 
 enum State {IN_GAME, PAUSE_MENU, MAIN_MENU, LEVEL_SELECT, VICTORY_SCREEN, GAMEOVER_SCREEN, CREDITS, EXIT};
 
@@ -18,6 +19,7 @@ private:
     SimpleScreen* victory_tab;
     SimpleScreen* credits_tab;
     MainMenu mainmenu;
+    LevelSelect level_select;
     void update();
     void render();
     void handle_events();

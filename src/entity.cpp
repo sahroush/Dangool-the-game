@@ -193,7 +193,6 @@ Sprite Entity::get_sprite(){
 }
 
 void Entity::rotate90(){
-    static bool moved = false;
     if(!moved){
         moved = true;
         sprite.move(sprite.getGlobalBounds().width/2.f, sprite.getGlobalBounds().height/2.f);

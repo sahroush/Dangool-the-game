@@ -3,11 +3,8 @@
 System::System(int width, int height){
     window.create(VideoMode(width, height), "Turtix", Style::Close);
     window.setFramerateLimit(FRAME_RATE);
-    state = MAIN_MENU; //must start with menu
+    state = MAIN_MENU;
     mainmenu.play();
-    for(int i = 0; i < LEVEL_COUNT ; i++){
-        levels[i] = new Level;
-    }
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
     credits_tab = new SimpleScreen("Credits:\n\n\nSoroush Sahraei\n\nParsa Daghigh", "victory.ogg", "score.ttf");
@@ -43,8 +40,17 @@ void System::handle_key_down(Keyboard::Key key){
             }
             break;
         case(MAIN_MENU):
+            if(key == Keyboard::Escape){
+                mainmenu.stop();
+                state = EXIT;
+            }
             break;
         case(LEVEL_SELECT):
+            if(key == Keyboard::Escape){
+                level_select.stop();
+                state = MAIN_MENU;
+                mainmenu.play();
+            }
             break;
         case(VICTORY_SCREEN):
             break;
@@ -81,6 +87,7 @@ void System::handle_events(){
         switch(event.type){
             case(Event::Closed):
                 window.close();
+                state = EXIT;
                 break;
             case(Event::KeyPressed):
                 handle_key_down(event.key.code);
@@ -117,6 +124,7 @@ void System::handle_mouse_press(Event ev){
             mainmenu.get_clicked(pos);
             break;
         case(LEVEL_SELECT):
+            level_select.get_clicked(pos);
             break;
         case(VICTORY_SCREEN):
             break;
@@ -144,6 +152,7 @@ void System::handle_mouse_release(Event ev){
             mainmenu.get_unclicked(pos);
             break;
         case(LEVEL_SELECT):
+            level_select.get_unclicked(pos);
             break;
         case(VICTORY_SCREEN):
             break;
@@ -186,6 +195,7 @@ void System::update(){
                 levels[current_level_id]->unpause(); 
             }
             if(main_menu_button.get_status()){
+                delete levels[current_level_id];
                 state = MAIN_MENU;
                 mainmenu.play();
             }
@@ -199,11 +209,26 @@ void System::update(){
             if(mainmenu.check_start()){
                 mainmenu.stop();
                 state = LEVEL_SELECT;
-                //play level select
+                level_select.play();
             }
             break;
-        case(LEVEL_SELECT):
+        case(LEVEL_SELECT):{
+            level_select.update();
+            if(level_select.check_exit()){
+                level_select.stop();
+                state = MAIN_MENU;
+                mainmenu.play();
+            }
+            int next_level = level_select.check_level();
+            if(next_level != -1){
+                current_level_id = next_level;
+                state = IN_GAME;
+                level_select.stop();
+                levels[current_level_id] = new Level;
+                levels[current_level_id]->init(current_level_id);
+            }
             break;
+        }
         case(VICTORY_SCREEN):
             accumulator += clock.restart();
             victory_tab->update();
@@ -211,6 +236,7 @@ void System::update(){
                 victory_tab->stop();
                 state = MAIN_MENU;
                 mainmenu.play();
+                delete levels[current_level_id];
             }
             break;
         case(GAMEOVER_SCREEN):
@@ -220,6 +246,7 @@ void System::update(){
                 game_over_tab->stop();
                 state = MAIN_MENU;
                 mainmenu.play();
+                delete levels[current_level_id];
             }
             break;
         case(CREDITS):
@@ -249,6 +276,7 @@ void System::render(){
             mainmenu.render(window);
             break;
         case(LEVEL_SELECT):
+            level_select.render(window);
             break;
         case(VICTORY_SCREEN):
             victory_tab->render(window);
