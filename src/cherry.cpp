@@ -97,5 +97,6 @@ void Cherry::get_killed(){
     update_count = 0;
     accumulator = Time::Zero;
     clock.restart();
+    direction = -1;
     state = cherry::KNOCKED;
 }

@@ -41,4 +41,5 @@ private:
     void handle_mouse_release(Event ev);
     Button resume_button = Button("Resume", "score.ttf", 31);
     Button main_menu_button = Button("Main Menu", "score.ttf", 25);
+    bool changed_state = false;
 };

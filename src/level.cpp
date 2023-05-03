@@ -71,13 +71,6 @@ void Level::render_compass(RenderWindow& window){
 
 Level::~Level(){
     music.stop();
-    delete player;
-    for(auto x : terrain)
-        delete x;
-    for(auto x : rewards)
-        delete x;
-    delete heart_sprite;
-    delete teleporter;
 }
 
 void Level::init_music(int id){

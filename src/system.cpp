@@ -19,8 +19,9 @@ System::~System(){
 void System::run(){
     while (window.isOpen() and state != EXIT){
         handle_events();
-        if(window.isOpen() and state != EXIT)update();
-        if(window.isOpen() and state != EXIT)render();
+        if(!changed_state and window.isOpen() and state != EXIT)update();
+        if(!changed_state and window.isOpen() and state != EXIT)render();
+        changed_state = false;
     }
     for(int i = 0; i < LEVEL_COUNT ; i++){
         delete levels[i];
@@ -37,12 +38,14 @@ void System::handle_key_down(Keyboard::Key key){
             if(key == Keyboard::Escape){
                 levels[current_level_id]->unpause();
                 state = IN_GAME;
+                changed_state = true;
             }
             break;
         case(MAIN_MENU):
             if(key == Keyboard::Escape){
                 mainmenu.stop();
                 state = EXIT;
+                changed_state = true;
                 exit(0);
             }
             break;
@@ -50,6 +53,7 @@ void System::handle_key_down(Keyboard::Key key){
             if(key == Keyboard::Escape){
                 level_select.stop();
                 state = MAIN_MENU;
+                changed_state = true;
                 mainmenu.play();
             }
             break;
@@ -89,6 +93,7 @@ void System::handle_events(){
             case(Event::Closed):
                 window.close();
                 state = EXIT;
+                changed_state = true;
                 exit(0);
                 break;
             case(Event::KeyPressed):
@@ -175,6 +180,7 @@ void System::update(){
                 state = GAMEOVER_SCREEN;
                 accumulator = Time::Zero;
                 clock.restart();
+                changed_state = true;
             }
             if(levels[current_level_id]->check_won()){
                 delete levels[current_level_id];
@@ -182,6 +188,7 @@ void System::update(){
                 state = VICTORY_SCREEN;
                 accumulator = Time::Zero;
                 clock.restart();
+                changed_state = true;
             }
             if(levels[current_level_id]->check_paused()){
                 state = PAUSE_MENU;
@@ -189,17 +196,20 @@ void System::update(){
                 screenshot = Sprite(level_screenshot_texture);
                 screenshot.setColor(Color(140, 140, 140));
                 levels[current_level_id]->pause(); 
+                changed_state = true;
             }
             break;
         case(PAUSE_MENU):
             if(resume_button.get_status()){
                 state = IN_GAME;
                 levels[current_level_id]->unpause(); 
+                changed_state = true;
             }
             if(main_menu_button.get_status()){
                 delete levels[current_level_id];
                 state = MAIN_MENU;
                 mainmenu.play();
+                changed_state = true;
             }
             break;
         case(MAIN_MENU):
@@ -207,12 +217,14 @@ void System::update(){
             if(mainmenu.check_exit()){
                 mainmenu.stop();
                 state = EXIT;
+                changed_state = true;
                 exit(0);
             }
             if(mainmenu.check_start()){
                 mainmenu.stop();
                 state = LEVEL_SELECT;
                 level_select.play();
+                changed_state = true;
             }
             break;
         case(LEVEL_SELECT):{
@@ -221,6 +233,7 @@ void System::update(){
                 level_select.stop();
                 state = MAIN_MENU;
                 mainmenu.play();
+                changed_state = true;
             }
             int next_level = level_select.check_level();
             if(next_level != -1){
@@ -229,6 +242,7 @@ void System::update(){
                 level_select.stop();
                 levels[current_level_id] = new Level;
                 levels[current_level_id]->init(current_level_id);
+                changed_state = true;
             }
             break;
         }
@@ -240,6 +254,7 @@ void System::update(){
                 state = MAIN_MENU;
                 mainmenu.play();
                 delete levels[current_level_id];
+                changed_state = true;
             }
             break;
         case(GAMEOVER_SCREEN):
@@ -250,6 +265,7 @@ void System::update(){
                 state = MAIN_MENU;
                 mainmenu.play();
                 delete levels[current_level_id];
+                changed_state = true;
             }
             break;
         case(CREDITS):
