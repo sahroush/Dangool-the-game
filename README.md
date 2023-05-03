@@ -11,6 +11,17 @@ sudo apt-get install libsfml-dev
 pip install pillow
 ```
 
+## Screenshots
+
+![main menu](./screenshots/0.png)
+
+![level select](./screenshots/1.png)
+
+![game](./screenshots/2.png)
+
+![yet another game](./screenshots/3.png)
+
+![game over](./screenshots/4.png)
 
 ## UML
 
