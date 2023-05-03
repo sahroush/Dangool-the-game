@@ -21,8 +21,9 @@ $(BIN_NAME): $(OBJ_FILES) $(HDR_FILES)
 
 clean:
 	rm -rf ./obj $(BIN_NAME)
-	rm -rf ./files/pics/bg/*.png
+	#rm -rf ./files/pics/bg/*.png
 
 run: $(BIN_NAME)
+	pip install pillow
 	python3 $(SCRIPT)
 	$(BIN_NAME) || clear
