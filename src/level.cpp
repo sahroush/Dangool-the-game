@@ -368,9 +368,9 @@ void Level::render(RenderWindow &window){
     window.setView(view);
     render_score(window);
     render_hp(window, player->get_hp());
-    render_compass(window);
-    pause_button.set_position({view.getCenter().x, view.getCenter().y});
+    pause_button.set_position({view.getCenter().x + WIDTH/2.f - pause_button.get_width(), view.getCenter().y - HEIGHT/2.f});
     pause_button.render(window);
+    render_compass(window);
 }
 
 void Level::render_terrain(RenderWindow &window){

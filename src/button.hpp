@@ -15,6 +15,8 @@ public:
     bool get_status();
     void get_clicked(Vector2f position);
     void get_unclicked(Vector2f position);
+    float get_width();
+    float get_height();
 private:
     bool is_in_button(Vector2f position);
     Font font;

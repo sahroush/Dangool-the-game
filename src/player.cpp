@@ -110,7 +110,6 @@ void Player::update(double left_bound, double right_bound){
     update_avatar();
     update_position(left_bound, right_bound);
     update_sheild();
-    cout << state << endl;
 }
 
 void Player::go_left(){

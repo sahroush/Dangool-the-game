@@ -22,7 +22,7 @@ namespace level{
     const int HEART_X = 2;
     const int HEART_Y = 51;
     const Vector2f HEART_SCALE = {5, 5};
-    const int MARGIN = 85;
+    const int MARGIN = 100;
 }
 class Level{
 public:

@@ -53,6 +53,14 @@ void Button::render(RenderWindow &window){
     window.draw(text);
 }
 
+float Button::get_width(){
+    return pressed.getGlobalBounds().width;
+}
+
+float Button::get_height(){
+    return pressed.getGlobalBounds().height;
+}
+
 bool Button::is_in_button(Vector2f position){
     FloatRect button_rect;
     button_rect.left = pos.x;
