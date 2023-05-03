@@ -108,4 +108,3 @@ private:
     Vector2f get_local_pos(Vector2f pos);
 };
 
-//todo: add better scream for player
