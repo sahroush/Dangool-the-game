@@ -198,17 +198,17 @@ void Level::check_collisions(){
 }
 
 void Level::handle_mouse_press(Vector2f pos){
-    pause.get_clicked(convert_to_local_position(pos));
+    pause_button.get_clicked(get_local_pos(pos));
 }
 
-Vector2f Level::convert_to_local_position(Vector2f pos){
+Vector2f Level::get_local_pos(Vector2f pos){
     pos.x += view.getCenter().x - WIDTH/2.f;
     pos.y += view.getCenter().y - HEIGHT/2.f;
     return pos;
 }
 
 void Level::handle_mouse_release(Vector2f pos){
-    pause.get_unclicked(convert_to_local_position(pos));
+    pause_button.get_unclicked(get_local_pos(pos));
 }
 
 bool Level::will_fall(Sprite sp){
@@ -261,6 +261,12 @@ bool Level::check_won(){
 
 void Level::unpause(){
     is_paused = false;
+    music.play();
+}
+
+void Level::pause(){
+    is_paused = true;
+    music.pause();
 }
 
 void Level::update(){
@@ -282,8 +288,9 @@ void Level::update(){
     if(has_won){
         return;
     }   
-    if(pause.get_status())
+    if(pause_button.get_status()){
         is_paused = true;
+    }
 }
 
 void Level::update_rewards(){
@@ -362,8 +369,8 @@ void Level::render(RenderWindow &window){
     render_score(window);
     render_hp(window, player->get_hp());
     render_compass(window);
-    pause.set_position({view.getCenter().x, view.getCenter().y});
-    pause.render(window);
+    pause_button.set_position({view.getCenter().x, view.getCenter().y});
+    pause_button.render(window);
 }
 
 void Level::render_terrain(RenderWindow &window){

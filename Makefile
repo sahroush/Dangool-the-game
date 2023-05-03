@@ -11,6 +11,7 @@ MEDIA_PATH = ./files/
 .PHONY: run
 
 $(BIN_NAME): $(OBJ_FILES) $(HDR_FILES)
+	mkdir -p ./bin
 	$(CXX) $(OBJ_FILES) $(CXXFLAGS) $(LFLAGS) -o $(BIN_NAME) -L$(MEDIA_PATH)
 
 ./obj/%.o: ./src/%.cpp

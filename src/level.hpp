@@ -39,12 +39,13 @@ public:
     void handle_mouse_release(Vector2f pos);
     bool check_paused();
     void unpause();
+    void pause();
 protected:
 
 private:
     bool is_paused = false;
     Player* player;
-    Button pause = Button("Pause");
+    Button pause_button = Button("Pause");
     void check_enemy_interactions();
     void read_map(string map_path);
     void render_terrain(RenderWindow &window);
@@ -103,7 +104,7 @@ private:
     void init_compass();
     void update_compass();
     void render_compass(RenderWindow &window);
-    Vector2f convert_to_local_position(Vector2f pos);
+    Vector2f get_local_pos(Vector2f pos);
 };
 
 //todo: add better scream for player

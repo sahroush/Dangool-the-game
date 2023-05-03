@@ -7,7 +7,7 @@ System::System(int width, int height){
     for(int i = 0; i < LEVEL_COUNT ; i++){
         levels[i] = new Level;
     }
-    current_level_id = 2; //level_select must do this.
+    current_level_id = 0; //level_select must do this. //map 1 breaks the game 
     levels[current_level_id]->init(current_level_id);
     victory_tab = new SimpleScreen("Winner Winner Chicken dinner!", "victory.ogg", "score.ttf");
     game_over_tab = new SimpleScreen("Game over! :'(", "gameover.ogg", "score.ttf");
@@ -161,6 +161,7 @@ void System::update(){
             }
             if(levels[current_level_id]->check_paused()){
                 state = PAUSE_MENU;
+                levels[current_level_id]->pause(); 
             }
             break;
         case(PAUSE_MENU):
@@ -191,9 +192,10 @@ void System::update(){
 }
 
 void System::render(){
-    window.clear(BLUE);
+    window.clear();
     switch(state){
         case(IN_GAME):
+            window.clear(BLUE);
             levels[current_level_id]->render(window);
             break;
         case(PAUSE_MENU):
