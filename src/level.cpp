@@ -261,11 +261,15 @@ bool Level::check_won(){
 
 void Level::unpause(){
     is_paused = false;
-    music.play();
+    if(music.getStatus() != Music::Playing)
+        music.play();
 }
 
 void Level::pause(){
     is_paused = true;
+    player->stop_jump();
+    player->stop_left();
+    player->stop_right();
     music.pause();
 }
 
@@ -357,7 +361,7 @@ void Level::render_hp(RenderWindow &window, int hp){
     }
 }
 
-void Level::render(RenderWindow &window){
+void Level::render(RenderWindow &window, bool draw_pause){
     teleporter->render(window);
     render_terrain(window);
     render_cherries(window);
@@ -368,9 +372,21 @@ void Level::render(RenderWindow &window){
     window.setView(view);
     render_score(window);
     render_hp(window, player->get_hp());
-    pause_button.set_position({view.getCenter().x + WIDTH/2.f - pause_button.get_width(), view.getCenter().y - HEIGHT/2.f});
-    pause_button.render(window);
+    if(draw_pause){
+        pause_button.set_position({view.getCenter().x + WIDTH/2.f - pause_button.get_width(), view.getCenter().y - HEIGHT/2.f});
+        pause_button.render(window);
+    }
     render_compass(window);
+}
+
+Texture Level::get_screenshot(RenderWindow &window){
+    window.clear(BLUE);
+    render(window, 0);
+    Texture texture;
+    texture.create(window.getSize().x, window.getSize().y);
+    texture.update(window);
+    window.clear();
+    return texture;
 }
 
 void Level::render_terrain(RenderWindow &window){

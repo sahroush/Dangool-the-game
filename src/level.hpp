@@ -29,7 +29,7 @@ public:
     Level();
     ~Level(); 
     void update();
-    void render(RenderWindow &window);
+    void render(RenderWindow &window, bool draw_pause = true);
     void init(int level);
     void handle_key_down(Keyboard::Key key);
     void handle_key_up(Keyboard::Key key);
@@ -39,7 +39,8 @@ public:
     void handle_mouse_release(Vector2f pos);
     bool check_paused();
     void unpause();
-    void pause();
+    void pause();  
+    Texture get_screenshot(RenderWindow &window);
 protected:
 
 private:

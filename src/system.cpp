@@ -38,6 +38,10 @@ void System::handle_key_down(Keyboard::Key key){
                 levels[current_level_id] -> handle_key_down(key);
             break;
         case(PAUSE_MENU):
+            if(key == Keyboard::Escape){
+                levels[current_level_id]->unpause();
+                state = IN_GAME;
+            }
             break;
         case(MAIN_MENU):
             break;
@@ -104,8 +108,12 @@ void System::handle_mouse_press(Event ev){
         case(IN_GAME):
             levels[current_level_id] -> handle_mouse_press({ev.mouseButton.x, ev.mouseButton.y});
             break;
-        case(PAUSE_MENU):
+        case(PAUSE_MENU):{
+            Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
+            resume_button.get_clicked(pos);
+            main_menu_button.get_clicked(pos);
             break;
+        }
         case(MAIN_MENU):
             break;
         case(LEVEL_SELECT):
@@ -126,8 +134,12 @@ void System::handle_mouse_release(Event ev){
         case(IN_GAME):
             levels[current_level_id] -> handle_mouse_release({ev.mouseButton.x, ev.mouseButton.y});
             break;
-        case(PAUSE_MENU):
+        case(PAUSE_MENU):{
+            Vector2f pos = {ev.mouseButton.x, ev.mouseButton.y};
+            resume_button.get_unclicked(pos);
+            main_menu_button.get_unclicked(pos);
             break;
+        }
         case(MAIN_MENU):
             break;
         case(LEVEL_SELECT):
@@ -161,10 +173,20 @@ void System::update(){
             }
             if(levels[current_level_id]->check_paused()){
                 state = PAUSE_MENU;
+                level_screenshot_texture = levels[current_level_id]->get_screenshot(window);
+                screenshot = Sprite(level_screenshot_texture);
+                screenshot.setColor(Color(140, 140, 140));
                 levels[current_level_id]->pause(); 
             }
             break;
         case(PAUSE_MENU):
+            if(resume_button.get_status()){
+                state = IN_GAME;
+                levels[current_level_id]->unpause(); 
+            }
+            if(main_menu_button.get_status()){
+                state = MAIN_MENU;
+            }
             break;
         case(MAIN_MENU):
             break;
@@ -198,8 +220,17 @@ void System::render(){
             window.clear(BLUE);
             levels[current_level_id]->render(window);
             break;
-        case(PAUSE_MENU):
+        case(PAUSE_MENU):{
+            window.setView(window.getDefaultView());
+            window.draw(screenshot);
+            int tot_width = main_menu_button.get_width() + BUTTON_MARGIN + resume_button.get_width();
+            main_menu_button.set_position({(WIDTH - tot_width)/2.f, HEIGHT/2.f});
+            main_menu_button.render(window);
+            resume_button.set_position({(WIDTH - tot_width)/2.f + BUTTON_MARGIN + main_menu_button.get_width()
+                , HEIGHT/2.f});
+            resume_button.render(window);
             break;
+        }
         case(MAIN_MENU):
             break;
         case(LEVEL_SELECT):
