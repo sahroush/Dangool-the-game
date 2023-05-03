@@ -28,4 +28,4 @@ clean:
 	rm -rf ./files/pics/bg/*.png
 
 run: $(BIN_NAME)
-	$(BIN_NAME) #|| clear
+	$(BIN_NAME) || clear
