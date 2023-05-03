@@ -53,6 +53,6 @@ void MainMenu::play(){
 }
 
 void MainMenu::stop(){
-    if(music.getStatus() != music.Playing)
+    if(music.getStatus() == music.Playing)
         music.stop();
 }
