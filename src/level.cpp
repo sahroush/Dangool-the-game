@@ -3,7 +3,7 @@
 Level::Level() {
   if (!block_texture.loadFromFile(PICS_PATH + "blocks.png")) {
     throw runtime_error("couldn't read block.png");
-  } // TBD: add second block, suitable for stacking
+  } 
   if (!heart_texture.loadFromFile(PICS_PATH + "objects.png")) {
     throw runtime_error("couldn't read objects.png");
   }

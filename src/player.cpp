@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 Player::Player(int x_, int y_) {
-  skin = player::KING; // we do need a skin picker but fuck off for now :D
+  skin = player::KING;
   if (!texture->loadFromFile(PICS_PATH + "characters.png")) {
     throw runtime_error("couldn't read player sprite");
   }
